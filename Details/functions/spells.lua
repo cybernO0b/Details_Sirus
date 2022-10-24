@@ -43,12 +43,13 @@ do
 		-- [48982] = 250, -- Rune Tap
 		[56222] = 250, -- Dark Command
 		[51429] = 250, -- Blood Boil, Rank 5
-		[308113] = 250, -- 
+		[308113] = 250, -- Blood Boil, Rank 5
 
 		-- Balance Druid:
 		[53201] = 102, -- Starfall, Rank 4
 		[48465] = 102, -- Starfire, Rank 10
 		[48468] = 102, -- Insect Swarm, Rank 7
+
 		[24858] = 102, -- so va
 		[50516] = 102,  -- TaiFuN
 
@@ -87,7 +88,6 @@ do
 		-- [63672] = 255, -- Black Arrow
 		[63672] = 255, -- Black Arrow Rank 6
 		[60053] = 255, -- Explosive Shot Rank 4
-
 		-- Arcane Mage:
 		-- [12042] = 62, -- Arcane Power
 		[31589] = 62, -- Slow
@@ -110,12 +110,12 @@ do
 		[47610]	= 64, -- Frostfire Bolt, Rank 2
 		[44572] = 64, -- Deep Freeze
 
-		-- Holy Paladin:
+			-- Holy Paladin:
 		-- [31821] = 65, -- Devotion Aura
 		[53563] = 65, -- Beacon of Light
 		-- [48817] = 65, -- Denounce, Rank 5
 		[48825] = 65, -- Holy Shock, Rank 7
-		[20216] = 65, -- 
+		-- [20216] = 65, -- 
 		[20216] = 65, -- 31842
 
 		-- Protection Paladin:
@@ -1025,12 +1025,14 @@ do
 		[304736] = 10, -- Priest, Divine Charm (T4), T4
 		[305082] = 10, -- Priest, Power Word: Shield (T4), T4
 		[315529] = 10, -- расколотое солнце
+
 		-- trinkets
 		[317293] = 10, -- bronze statuette
 
 		[55277] = 12, -- shmn ttm
 		--ttg
 		[318754] = 7, --ench ttg
+
 		-- weapons
 		[317905] = 10,   --- духовный барьер ТТГ
 		[317907] = 10,
@@ -1157,7 +1159,7 @@ do
 		[31002] = 300, -- Pendant of the Null Rune
 		[30999] = 300, -- Pendant of Withering
 		[30994] = 300, -- Pendant of Thawing
-		-- [31000] = 300, --
+		[31000] = 300, --
 		[23506]= 20, -- Arena Grand Master Usage (Aura of Protection)
 		[12561] = 60, -- Goblin Construction Helmet usage
 		[31771] = 20, -- Runed Fungalcap usage
@@ -1277,13 +1279,11 @@ do
 		[1038] = {120, 10}, -- Hand of Salvation
 		[64205] = {120,10}, -- Sacred
 		["PALADIN"] = {64205, 498, 642, 6940, 1022, 1038, 633, 31821},
-
 		-- Priest
 		[47788] = {180, 10}, -- Guardian Spirit
 		[47585] = {120, 6}, -- Dispersion
 		[33206] = {180, 8}, -- Pain Suppression
 		["PRIEST"] = {47788, 47585, 33206, 62618, 64843, 10060},
-
 		-- Rogue
 		[1966] = {1.5, 5}, -- Feint
 		[31224] = {60, 5}, -- Cloak of Shadows

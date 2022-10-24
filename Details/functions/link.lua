@@ -159,6 +159,7 @@
 		local current_table_bigwigs = {}
 
 		local event_frame = Details:CreateEventListener()
+		
 		function event_frame:OnDetailsEvent (event, ...)
 			if (event == "COMBAT_ENCOUNTER_START") then
 				local encounterID, encounterName, difficultyID, raidSize = select (1, ...)
@@ -400,11 +401,11 @@
 
 		local listener = _detalhes:CreateEventListener()
 
-		function listener:on_enter_combat(event, combat, encounterId)
+		function listener:on_enter_combat (event, combat, encounterId)
 
 		end
 
-		function listener:on_leave_combat(event, combat)
+		function listener:on_leave_combat (event, combat)
 
 		end
 

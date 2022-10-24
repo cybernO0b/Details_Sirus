@@ -483,7 +483,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		local guid = _detalhes:FindGUIDFromName ("Ditador")
 		print (guid)
 
-		for i = 1, GetNumGroupMembers(), 1 do
+		for i = 1, GetNumGroupMembers()-1, 1 do
 			local name, realm = UnitName ("party"..i)
 			print (name, " -- ", realm)
 		end
@@ -672,7 +672,7 @@ function SlashCmdList.DETAILS (msg, editbox)
 		--self:SetFont(fontFile, fontSize, fontFlags);
 
 	elseif (msg == "error") then
-		local a = nil + 1
+		a = nil + 1
 
 	--> debug
 	elseif (command == "resetcapture") then
@@ -1407,7 +1407,7 @@ Damage Update Status: @INSTANCEDAMAGESTATUS
 		end
 
 		--> create a new combat to be the overall for the mythic run
-		_detalhes:StartCombat()
+		_detalhes:EntrarEmCombate()
 
 		--> get the current combat just created and the table with all past segments
 		local newCombat = _detalhes:GetCurrentCombat()
