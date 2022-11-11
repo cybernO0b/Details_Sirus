@@ -1771,9 +1771,9 @@ function parser:heal(token, time, who_serial, who_name, who_flags, alvo_serial, 
 		this_event[6] = who_name --> source name
 		this_event[7] = is_shield
 		this_event[8] = absorbed
-		for a = 1,#this_event do
-			this_event[a] = this_event[a] or nil
-		end
+		-- for a = 1,#this_event do
+		-- 	this_event[a] = this_event[a] or nil
+		-- end
 		i = i + 1
 
 		if(i == _death_event_amt+1) then

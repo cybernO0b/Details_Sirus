@@ -262,6 +262,7 @@ function _detalhes:ToolTipDead (instancia, morte, esta_barra, keydown)
 					end
 				else
 					--> heal
+					-- print(_detalhes.deathlog_healingdone_min)
 					if (amount > _detalhes.deathlog_healingdone_min) then
 						GameCooltip:AddLine ("" .. _cstr ("%.1f", time - hora_da_morte) .. "s " .. spellname .. " (|cFFC6B0D9" .. source .. "|r)", "+" .. _detalhes:ToK (amount) .. " (" .. hp .. "%)", 1, "white", "white")
 						GameCooltip:AddIcon (spellicon)
