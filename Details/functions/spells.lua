@@ -107,7 +107,7 @@ do
 		-- Frost Mage:
 		[42914] = 64, -- Ice Lance, Rank 3
 		-- [42842] = 64, -- Frostbolt, Rank 16
-		[47610]	= 64, -- Frostfire Bolt, Rank 2
+		-- [47610]	= 64, -- Frostfire Bolt, Rank 2
 		[44572] = 64, -- Deep Freeze
 
 			-- Holy Paladin:
