@@ -1197,7 +1197,8 @@ do
 		[65686] = 86400, -- Twin Val'kyr Light Essence
 		[65684] = 86400, -- Twin Val'kyr Dark Essence
 
-		[313124] = 60, -- bs vnevremennaya pregrada test
+		-- [313124] = 60, -- bs vnevremennaya pregrada test
+		[320439] = 10, -- nefrit charge
 		-- [317901] = 30, -- bs vnevremennaya pregrada test
 
 
