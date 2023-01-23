@@ -1009,6 +1009,7 @@ do
 		[319166] = 10, --hpal absorb t4
 
 		[308125] = 10, -- Death Knight, Ice Armor, T5
+		[319552] = 6, --t6 dk
 		[308136] = 20, -- bdk absorb
 
 		[307921] = 10, -- pal absorb
