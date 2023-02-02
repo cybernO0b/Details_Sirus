@@ -788,7 +788,7 @@
 		--> repara mapa
 			local mapa = {}
 			for i = 1, #container._ActorTable do
-				mapa [container._ActorTable[i].nome] = i
+				mapa[container._ActorTable[i].nome] = i
 			end
 			container._NameIndexTable = mapa
 
