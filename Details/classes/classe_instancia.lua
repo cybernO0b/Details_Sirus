@@ -3206,6 +3206,7 @@ function _detalhes:monta_relatorio (este_relatorio, custom)
 
 end
 
+local delay = 0.3
 function _detalhes:envia_relatorio (linhas, custom)
 
 	local segmento = self.segmento
@@ -3361,7 +3362,7 @@ function _detalhes:envia_relatorio (linhas, custom)
 		BNSendWhisper (timerObject.Arg1, timerObject.Arg2)
 	end
 
-	local delay = 200
+
 
 	if (channel) then
 
@@ -3373,7 +3374,7 @@ function _detalhes:envia_relatorio (linhas, custom)
 			end
 
 			local channelName = GetChannelName (channel)
-			local timer = C_Timer:NewTicker (i * delay / 1000, send_report_channel, 1)
+			local timer = C_Timer:After(i * delay, send_report_channel)
 			timer.Arg1 = linhas[i]
 			timer.Arg2 = "CHANNEL"
 			timer.Arg3 = nil
@@ -3388,7 +3389,7 @@ function _detalhes:envia_relatorio (linhas, custom)
 		local presenceID = tonumber (id)
 
 		for i = 1, #linhas do
-			local timer = C_Timer:NewTicker (i * delay / 1000, send_report_bnet, 1)
+			local timer = C_Timer:After(i * delay, send_report_bnet)
 			timer.Arg1 = presenceID
 			timer.Arg2 = linhas[i]
 		end
@@ -3405,7 +3406,7 @@ function _detalhes:envia_relatorio (linhas, custom)
 		end
 
 		for i = 1, #linhas do
-			local timer = C_Timer:NewTicker (i * delay / 1000, send_report_channel, 1)
+			local timer = C_Timer:After (i * delay, send_report_channel)
 			timer.Arg1 = linhas[i]
 			timer.Arg2 = to_who
 			timer.Arg3 = nil
@@ -3432,9 +3433,11 @@ function _detalhes:envia_relatorio (linhas, custom)
 			_detalhes:Msg (Loc ["STRING_REPORT_INVALIDTARGET"])
 			return
 		end
-
+		-- local timer 
 		for i = 1, #linhas do
-			local timer = C_Timer:NewTicker (i * delay / 1000, send_report_channel, 1)
+			local timer = C_Timer:After(i * delay, function(self) 
+				SendChatMessage(self.Arg1, self.Arg2, self.Arg3, self.Arg4)
+			end)
 			timer.Arg1 = linhas[i]
 			timer.Arg2 = to_who
 			timer.Arg3 = nil
@@ -3445,7 +3448,9 @@ function _detalhes:envia_relatorio (linhas, custom)
 	end
 
 	for i = 1, #linhas do
-		local timer = C_Timer:NewTicker (i * delay / 1000, send_report_channel, 1)
+		local timer = C_Timer:After(i * delay, function(self) 
+			SendChatMessage(self.Arg1, self.Arg2, self.Arg3, self.Arg4)
+		end)
 		timer.Arg1 = linhas[i]
 		timer.Arg2 = to_who
 		timer.Arg3 = nil

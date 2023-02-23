@@ -550,7 +550,7 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		npcId = _tonumber(_sub(who_serial, 8, 12), 16) or 0
 		npcid_cache[who_serial] = npcId
 	end
-		check_boss(npcId)
+	check_boss(npcId)
 	if ignored_npcids[npcId] then
 		return
 	end
