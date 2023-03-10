@@ -437,6 +437,7 @@ local function check_boss(npcID)
 	end
 end
 -- local ticker = 1
+local mark
 function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing)
 ------------------------------------------------------------------------------------------------
 
@@ -569,9 +570,9 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 	if not _in_combat then
 		if token ~= "SPELL_PERIODIC_DAMAGE" then
 			if (IsInInstance()) then
-				-- if (_detalhes.last_combat_time + 10 < _tempo) then
+				if (_detalhes.last_combat_time + 10 < _tempo) then
 					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
-				-- end
+				end
 				if _detalhes.announce_firsthit.enabled then
 					local needMsg = false
 					-- local isPetPull = false
@@ -655,7 +656,9 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
 				end
 			elseif not (_bit_band(who_flags, REACTION_FRIENDLY) ~= 0 and _bit_band(alvo_flags, REACTION_FRIENDLY) ~= 0) and (_bit_band(who_flags, AFFILIATION_GROUP) ~= 0 or _bit_band(who_flags, AFFILIATION_GROUP) ~= 0) then
-				_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+				if (_detalhes.last_combat_time + 10 < _tempo) then
+					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+				end
 			end
 		end
 	end
@@ -937,35 +940,28 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		-- print(alvo_flags, 724)
 		--> raid targets
 		este_jogador.raid_targets = este_jogador.raid_targets or {}
-		if alvo_flags > 130000000  then
-			este_jogador.raid_targets ["skull"] = (este_jogador.raid_targets ["skull"] or 0) + amount
-			-- print(este_jogador.raid_targets ["skull"])
-		elseif alvo_flags > 60000000 then
-			este_jogador.raid_targets ["cross"] = (este_jogador.raid_targets ["cross"] or 0) + amount
-			-- print(este_jogador.raid_targets ["cross"])
-		elseif alvo_flags > 33000000 then
-			este_jogador.raid_targets ["square"] = (este_jogador.raid_targets ["square"] or 0) + amount
-			-- print(este_jogador.raid_targets ["square"])
-		elseif alvo_flags > 16000000 then
-			este_jogador.raid_targets ["moon"] = (este_jogador.raid_targets ["moon"] or 0) + amount
-			-- print(este_jogador.raid_targets ["moon"])
-		elseif alvo_flags > 8000000 then
-			este_jogador.raid_targets ["triangle"] = (este_jogador.raid_targets ["triangle"] or 0) + amount
-			-- print(este_jogador.raid_targets ["triangle"])
-		elseif alvo_flags > 4200000 then
-			este_jogador.raid_targets ["diamond"] = (este_jogador.raid_targets ["diamond"] or 0) + amount
-			-- print(este_jogador.raid_targets ["diamond"])
-		elseif alvo_flags > 2000000 then
-			este_jogador.raid_targets ["circle"] = (este_jogador.raid_targets ["circle"] or 0) + amount
-			-- print(este_jogador.raid_targets ["circle"])
-		elseif alvo_flags > 1100000 then
-			este_jogador.raid_targets ["star"] = (este_jogador.raid_targets ["star"] or 0) + amount
-			-- print(este_jogador.raid_targets ["star"])
+		if bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET8) > 0 then
+            mark = "skull"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET7) > 0 then
+            mark = "cross"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET6) > 0 then
+            mark = "square"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET5) > 0 then
+            mark = "moon"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET4) > 0 then
+            mark = "triangle"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET3) > 0 then
+            mark = "diamond"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET2) > 0 then
+            mark = "circle"
+        elseif bit.band(alvo_flags, COMBATLOG_OBJECT_RAIDTARGET1) > 0 then
+            mark = "star"
+		else
+			mark = nil
+        end
+		if mark then
+			este_jogador.raid_targets [mark] = (este_jogador.raid_targets [mark] or 0) + amount
 		end
-		-- if (RAID_TARGET_FLAGS [alvo_flags]) then
-
-
-		-- end
 
 		--> actor
 		este_jogador.total = este_jogador.total + amount
@@ -994,181 +990,7 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		-- --i = i+1
 		-- --print(i)
 		return spell_damage_func(spell, alvo_serial, alvo_name, alvo_flags, amount, who_name, resisted, blocked, absorbed, critical, glacing, token)
-	end
-
--- 	--special rule for LOTM
--- function parser:LOTM_damage(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing)
-
--- 	if(absorbed) then
--- 		amount = absorbed +(amount or 0)
--- 	end
-
--- 	local healingActor = healing_cache[who_serial]
--- 	if(healingActor and healingActor.spells) then
--- 		healingActor.total = healingActor.total -(amount or 0)
-
--- 		local spellTable = healingActor.spells:GetSpell(183998)
--- 		if(spellTable) then
--- 			spellTable.anti_heal =(spellTable.anti_heal or 0) + amount
--- 		end
--- 	end
-
--- 	local t = last_events_cache[who_name]
-
--- 	if(not t) then
--- 		t = _current_combat:CreateLastEventsTable(who_name)
--- 	end
-
--- 	local i = t.n
-
--- 	local this_event = t[i]
-
--- 	if(not this_event) then
--- 		return print("Parser Event Error -> Set to 16 DeathLogs and /reload", i, _death_event_amt)
--- 	end
-
--- 	this_event[1] = true --> true if this is a damage || false for healing
--- 	this_event[2] = spellid --> spellid || false if this is a battle ress line
--- 	this_event[3] = amount --> amount of damage or healing
--- 	this_event[4] = time --> parser time
--- 	this_event[5] = _UnitHealth(who_name) --> current unit heal
--- 	this_event[6] = who_name --> source name
--- 	this_event[7] = absorbed
--- 	this_event[8] = school
--- 	this_event[9] = true --> friendly fire
--- 	this_event[10] = overkill
-
--- 	i = i + 1
-
--- 	if(i == _death_event_amt+1) then
--- 		t.n = 1
--- 	else
--- 		t.n = i
--- 	end
-
--- 	local damageActor = damage_cache[who_serial]
--- 	if(damageActor) then
--- 		--damage taken
--- 		damageActor.damage_taken = damageActor.damage_taken + amount
--- 		if(not damageActor.damage_from[who_name]) then --> adiciona a pool de dano tomado de quem
--- 			damageActor.damage_from[who_name] = true
--- 		end
-
--- 		--friendly fire
--- 		damageActor.friendlyfire_total = damageActor.friendlyfire_total + amount
--- 		local friend = damageActor.friendlyfire[who_name] or damageActor:CreateFFTable(who_name)
--- 		friend.total = friend.total + amount
--- 		friend.spells[spellid] =(friend.spells[spellid] or 0) + amount
--- 	end
--- end
-
--- 	--special rule of SLT
--- function parser:SLT_damage(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing)
-
--- 	--> damager
--- 	local este_jogador, meu_dono = damage_cache[who_serial] or damage_cache_pets[who_serial] or damage_cache[who_name], damage_cache_petsOwners[who_serial]
-
--- 	if(not este_jogador) then --> pode ser um desconhecido ou um pet
-
--- 		este_jogador, meu_dono, who_name = _current_damage_container:PegarCombatente(who_serial, who_name, who_flags, true)
-
--- 		if(meu_dono) then --> � um pet
--- 			if(who_serial ~= "") then
--- 				damage_cache_pets[who_serial] = este_jogador
--- 				damage_cache_petsOwners[who_serial] = meu_dono
--- 			end
--- 			--conferir se o dono j� esta no cache
--- 			if(not damage_cache[meu_dono.serial] and meu_dono.serial ~= "") then
--- 				damage_cache[meu_dono.serial] = meu_dono
--- 			end
--- 		else
--- 			if(who_flags) then --> ter certeza que n�o � um pet
--- 				if(who_serial ~= "") then
--- 					damage_cache[who_serial] = este_jogador
--- 				else
--- 					if(who_name:find("%[")) then
--- 						damage_cache[who_name] = este_jogador
--- 						local _, _, icon = _GetSpellInfo(spellid or 1)
--- 						este_jogador.spellicon = icon
--- 						--print("no serial actor", spellname, who_name, "added to cache.")
--- 					else
--- 						--_detalhes:Msg("Unknown actor with unknown serial ", spellname, who_name)
--- 					end
--- 				end
--- 			end
--- 		end
-
--- 	elseif(meu_dono) then
--- 		--> � um pet
--- 		who_name = who_name .. " <" .. meu_dono.nome .. ">"
--- 	end
-
--- 	--> his target
--- 	local jogador_alvo, alvo_dono = damage_cache[alvo_serial] or damage_cache_pets[alvo_serial] or damage_cache[alvo_name], damage_cache_petsOwners[alvo_serial]
-
--- 	if(not jogador_alvo) then
-
--- 		jogador_alvo, alvo_dono, alvo_name = _current_damage_container:PegarCombatente(alvo_serial, alvo_name, alvo_flags, true)
-
--- 		if(alvo_dono) then
--- 			if(alvo_serial ~= "") then
--- 				damage_cache_pets[alvo_serial] = jogador_alvo
--- 				damage_cache_petsOwners[alvo_serial] = alvo_dono
--- 			end
--- 			--conferir se o dono j� esta no cache
--- 			if(not damage_cache[alvo_dono.serial] and alvo_dono.serial ~= "") then
--- 				damage_cache[alvo_dono.serial] = alvo_dono
--- 			end
--- 		else
--- 			if(alvo_flags and alvo_serial ~= "") then --> ter certeza que n�o � um pet
--- 				damage_cache[alvo_serial] = jogador_alvo
--- 			end
--- 		end
-
--- 	elseif(alvo_dono) then
--- 		--> � um pet
--- 		alvo_name = alvo_name .. " <" .. alvo_dono.nome .. ">"
--- 	end
-
--- 	--> last event
--- 	este_jogador.last_event = _tempo
-
--- 	--> record death log
--- 	local t = last_events_cache[alvo_name]
-
--- 	if(not t) then
--- 		t = _current_combat:CreateLastEventsTable(alvo_name)
--- 	end
-
--- 	local i = t.n
-
--- 	local this_event = t[i]
-
--- 	if(not this_event) then
--- 		return print("Parser Event Error -> Set to 16 DeathLogs and /reload", i, _death_event_amt)
--- 	end
-
--- 	this_event[1] = true --> true if this is a damage || false for healing
--- 	this_event[2] = spellid --> spellid || false if this is a battle ress line
--- 	this_event[3] = amount --> amount of damage or healing
--- 	this_event[4] = time --> parser time
--- 	this_event[5] = _UnitHealth(alvo_name) --> current unit heal
--- 	this_event[6] = who_name --> source name
--- 	this_event[7] = absorbed
--- 	this_event[8] = spelltype or school
--- 	this_event[9] = false
--- 	this_event[10] = overkill
-
--- 	i = i + 1
-
--- 	if(i == _death_event_amt+1) then
--- 		t.n = 1
--- 	else
--- 		t.n = i
--- 	end
-
--- end
-
+end
 	--function parser:swingmissed(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, missType, amountMissed)
 function parser:swingmissed(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, missType, amountMissed) --, amountMissed, arg1
 	return parser:missed(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, 1, "Corpo-a-Corpo", 00000001, missType, amountMissed) --, amountMissed, arg1
@@ -1665,9 +1487,11 @@ function parser:heal(token, time, who_serial, who_name, who_flags, alvo_serial, 
 ------------------------------------------------------------------------------------------------
 --> early checks and fixes
 
-	--> only capture heal if is in combat
 	if(not _in_combat) then
-		if(not _in_resting_zone) then
+		-- if(not _in_resting_zone) then
+		-- 	return
+		-- end
+		if _detalhes.last_combat_time + 30 < _tempo then
 			return
 		end
 	end
