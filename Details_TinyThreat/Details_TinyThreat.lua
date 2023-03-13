@@ -2,7 +2,25 @@ local AceLocale = LibStub ("AceLocale-3.0")
 local Loc = AceLocale:GetLocale ("Details_Threat")
 
 local _GetNumSubgroupMembers = GetNumSubgroupMembers --> wow api
-local _GetNumGroupMembers = GetNumGroupMembers --> wow api
+local GetNumPartyMembers = GetNumPartyMembers
+local GetNumRaidMembers = GetNumRaidMembers
+
+
+function IsInGroup()
+	return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
+end
+
+function IsInRaid()
+	return GetNumRaidMembers() > 0
+end
+
+function GetNumSubgroupMembers()
+	return GetNumPartyMembers()
+end
+
+function GetNumGroupMembers()
+	return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
+end
 local _UnitIsFriend = UnitIsFriend --> wow api
 local _UnitName = UnitName --> wow api
 local _UnitDetailedThreatSituation = UnitDetailedThreatSituation
@@ -256,12 +274,10 @@ local function CreatePluginFrames ()
 					end
 
 					local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("raid"..i, "target")
-					-- print(threatvalue)
 					if (status) then
 						threat_table [2] = threatpct
 						threat_table [3] = isTanking
 						threat_table [6] = threatvalue
-						-- print(threatvalue.."         -----262")
 					else
 						threat_table [2] = 0
 						threat_table [3] = false
@@ -271,7 +287,9 @@ local function CreatePluginFrames ()
 				end
 
 			elseif (_IsInGroup()) then
+
 				for i = 1, _GetNumGroupMembers(), 1 do
+
 					local thisplayer_name = GetUnitName ("party"..i)
 					local threat_table_index = ThreatMeter.player_list_hash [thisplayer_name]
 					local threat_table = ThreatMeter.player_list_indexes [threat_table_index]
@@ -287,7 +305,6 @@ local function CreatePluginFrames ()
 						threat_table [2] = threatpct
 						threat_table [3] = isTanking
 						threat_table [6] = threatvalue
-						-- print(threatvalue.."         -----287")
 					else
 						threat_table [2] = 0
 						threat_table [3] = false
@@ -304,7 +321,6 @@ local function CreatePluginFrames ()
 					threat_table [2] = threatpct
 					threat_table [3] = isTanking
 					threat_table [6] = threatvalue
-					-- print(threatvalue.."         -----304")
 				else
 					threat_table [2] = 0
 					threat_table [3] = false
@@ -323,8 +339,6 @@ local function CreatePluginFrames ()
 					threat_table [2] = threatpct
 					threat_table [3] = isTanking
 					threat_table [6] = threatvalue
-					-- print(threatvalue.."         -----323")
-					-- threat_table [6] = 5555
 				else
 					threat_table [2] = 0
 					threat_table [3] = false
@@ -343,7 +357,6 @@ local function CreatePluginFrames ()
 							threat_table [2] = threatpct
 							threat_table [3] = isTanking
 							threat_table [6] = threatvalue
-							-- print(threatvalue.."         -----345")
 						else
 							threat_table [2] = 0
 							threat_table [3] = false
@@ -679,7 +692,7 @@ function ThreatMeter:OnEvent (_, event, ...)
 				ThreatMeterFrame:RegisterEvent ("PLAYER_TARGET_CHANGED")
 				ThreatMeterFrame:RegisterEvent ("PLAYER_REGEN_DISABLED")
 				ThreatMeterFrame:RegisterEvent ("PLAYER_REGEN_ENABLED")
-
+				-- _GetNumGroupMembers = GetNumGroupMembers
 				--> Saved data
 				ThreatMeter.saveddata = saveddata or {}
 

@@ -570,7 +570,7 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 	if not _in_combat then
 		if token ~= "SPELL_PERIODIC_DAMAGE" then
 			if (IsInInstance()) then
-				if (_detalhes.last_combat_time + 10 < _tempo) then
+				if (_detalhes.last_combat_time + 2 < _tempo) then
 					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
 				end
 				if _detalhes.announce_firsthit.enabled then
@@ -652,11 +652,11 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			--> entrar em combate se for dot e for do jogador e o ultimo combate ter sido a mais de 10 segundos atr�s
 			if token == "SPELL_PERIODIC_DAMAGE" and who_name == _detalhes.playername then
 				--> faz o calculo dos 10 segundos
-				if (_detalhes.last_combat_time + 10 < _tempo) then
+				if (_detalhes.last_combat_time + 2 < _tempo) then
 					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
 				end
 			elseif not (_bit_band(who_flags, REACTION_FRIENDLY) ~= 0 and _bit_band(alvo_flags, REACTION_FRIENDLY) ~= 0) and (_bit_band(who_flags, AFFILIATION_GROUP) ~= 0 or _bit_band(who_flags, AFFILIATION_GROUP) ~= 0) then
-				if (_detalhes.last_combat_time + 10 < _tempo) then
+				if (_detalhes.last_combat_time + 2 < _tempo) then
 					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
 				end
 			end
