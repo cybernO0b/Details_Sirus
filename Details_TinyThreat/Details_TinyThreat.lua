@@ -21,6 +21,8 @@ end
 function GetNumGroupMembers()
 	return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
 end
+
+local _GetNumGroupMembers = GetNumGroupMembers --> wow api
 local _UnitIsFriend = UnitIsFriend --> wow api
 local _UnitName = UnitName --> wow api
 local _UnitDetailedThreatSituation = UnitDetailedThreatSituation
