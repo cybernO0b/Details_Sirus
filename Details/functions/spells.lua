@@ -1101,7 +1101,7 @@ do
 		-- [47509] = 12, -- Divine Aegis (Priest) Rank 1
 		-- [47511] = 12,
 		-- [47515] = 12, -- Divine Aegis (Priest) Rank 3 (Some of these are not actual buff spellIDs)
-		-- [47753] = 12, -- Divine Aegis (Priest) Rank 3 ------ true
+		[47753] = 12, -- Divine Aegis (Priest) Rank 3 ------ true
 		-- [54704] = 12, -- Divine Aegis (Priest) Rank 1
 		[47788] = 10, -- Guardian Spirit  (Priest) (50 nominal absorb, this may not show in the CL)
 		-- Warlock
