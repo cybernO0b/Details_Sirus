@@ -1411,7 +1411,7 @@ do --> data for hyjal
 	_detalhes:InstallEncounter({
 		id = INSTANCE_MAPID,
 
-		name = LBZ["Zort"],
+		name = "Хиджал",
 		icons = "Interface\\AddOns\\"..HDIMAGESPATH.."\\"..HDFILEPREFIX.."_BossFaces",
 		icon = "Interface\\EncounterJournal\\"..EJ_DUNGEONBG,
 		is_raid = true,
