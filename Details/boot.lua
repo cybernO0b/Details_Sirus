@@ -84,7 +84,6 @@ do
 				[925] = true, -- The Bronze Sanctuary
 				[914] = true, -- zort
 				[864] = true, -- hijal
-
 			}
 
 			--must fail in map and encounter id to not store data
@@ -216,7 +215,7 @@ do
 		--> armazena os escudos - Shields information for absorbs
 			_detalhes.escudos = {}
 		--> armazena as fun��es dos frames - Frames functions
-			_detalhes.gump = _G ["DetailsFramework"]
+			_detalhes.gump = _G["DetailsFramework"]
 			function _detalhes:GetFramework()
 				return self.gump
 			end
@@ -505,7 +504,7 @@ do
 				_detalhes.StatusBar.Plugins = {}
 			--> name to plugin object
 				_detalhes.StatusBar.NameTable = {}
-			
+
 
 	--> constants
 		--[[global]] DETAILS_HEALTH_POTION_LIST = {

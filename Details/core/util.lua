@@ -457,7 +457,7 @@ end
 local blockedFunctions = {
 	-- Lua functions that may allow breaking out of the environment
 	getfenv = true,
-	getfenv = true,
+	setfenv = true,
 	loadstring = true,
 	pcall = true,
 	xpcall = true,
@@ -740,7 +740,7 @@ do
 
 	-- logic OR for number values
 	local function lor(x,y)
-		result = 0
+		local result = 0
 		for p=1,8 do result = result +(((bit(x,p) or bit(y,p)) == true) and 2^(p-1) or 0) end
 		return result
 	end
