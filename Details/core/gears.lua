@@ -1628,6 +1628,8 @@ function _detalhes:StoreEncounter (combat)
 		local myBestDps = (mybest [1] / onencounter.elapsed) or 0
 		local mybest2, onencounter2 = _detalhes.storage:GetBestFromPlayer (diff, encounter_id, myrole2, _detalhes.playername, true) --> get dps or hps
 		local myBestHps = (mybest2 [1] / onencounter2.elapsed) or 0
+		myBestHps = myBestHps or 0
+		myBestDps = myBestDps or 0
 		if (mybest or mybest2) then
 			local d_one_dps = 0
 			local d_one_hps = 0
@@ -1636,6 +1638,9 @@ function _detalhes:StoreEncounter (combat)
 			-- elseif (myrole == "HEALER") then
 				d_one_hps = combat (2, _detalhes.playername) and combat (2, _detalhes.playername).total / combat:GetCombatTime()
 			-- end
+			d_one_dps = d_one_dps or 0
+			d_one_hps = d_one_hps or 0
+
 
 			if (myBestDps > d_one_dps) then
 				if (not _detalhes.deny_score_messages) then
