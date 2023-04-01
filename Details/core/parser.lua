@@ -1566,13 +1566,14 @@ function parser:heal(token, time, who_serial, who_name, who_flags, alvo_serial, 
 ------------------------------------------------------------------------------------------------
 --> early checks and fixes
 
-	if (not _in_combat and _detalhes.SirusCustom.EnterInCombatWhenHeal) or (_detalhes.last_combat_time + 30 < _tempo) then
+	if (not _in_combat and _detalhes.SirusCustom.EnterInCombatWhenHeal) then
 		-- if(not _in_resting_zone) then
 		-- 	return
 		-- end
-		-- if _detalhes.last_combat_time + 30 < _tempo then
+		if _detalhes.last_combat_time + 30 < _tempo then
+			_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags) -- test func
 			return
-		-- end
+		end
 	end
 
 	--> check invalid serial against pets
