@@ -317,7 +317,7 @@ end
 
 -- 	local i = 1
 -- 	while (UnitExists("boss"..i)) do
--- 		-- --print(i)
+-- 		-- 
 -- 		if (UnitName("boss"..i) == PullTable.WhoName) then
 -- 			local target = UnitName("boss"..i.."target")
 -- 			-- print(target)
@@ -326,7 +326,7 @@ end
 -- 				break
 -- 			end
 -- 		end
--- 		--i = i+1;
+-- 		;
 -- 	end
 
 -- 	_detalhes:Msg(hitLine..targetLine)
@@ -446,8 +446,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 	-- end
 	-- local i = 1
 
-	--i = i+1
-		--print(i)
+	
+		
 	if who_serial == "" then
 		if who_flags and _bit_band(who_flags, OBJECT_TYPE_PETS) ~= 0 then --> � um pet
 			--> pets must have a serial
@@ -465,8 +465,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		who_flags = 0xa48
 		who_serial = ""
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	--> check if the spell isn't in the backlist
 	if damage_spells_to_ignore[spellid] then
 		return
@@ -524,8 +524,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			}
 		end
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	--> if the parser are allowed to replace spellIDs
 	if is_using_spellId_override then
 		spellid = override_spellId[spellid] or spellid
@@ -543,8 +543,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 	if ignored_npcids[npcId] then
 		return
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	--source
 	npcId = npcid_cache[who_serial]
 	if not npcId then
@@ -555,24 +555,22 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 	if ignored_npcids[npcId] then
 		return
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	if absorbed and absorbed > 0 and alvo_name and escudo[alvo_name] and who_name then
 
 		parser:heal_absorb(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, absorbed,spelltype)
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	------------------------------------------------------------------------------------------------
 	--> check if need start an combat
 			-- 	print(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing)
 		--        time,  event,      sguid,      sname,   sflags,      dguid,		dname,    dflags,     arg1,        arg2,arg3,itype;
 	if not _in_combat then
-		if token ~= "SPELL_PERIODIC_DAMAGE" then
-			if (IsInInstance()) then
-				if (_detalhes.last_combat_time + 2 < _tempo) then
-					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
-				end
+		if not (_bit_band(who_flags, REACTION_FRIENDLY) ~= 0 and _bit_band(alvo_flags, REACTION_FRIENDLY) ~= 0) and (_bit_band(who_flags, AFFILIATION_GROUP) ~= 0 or _bit_band(who_flags, AFFILIATION_GROUP) ~= 0) then
+			_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+			if _detalhes.encounter_table.id and _detalhes.encounter_table["start"] and _detalhes.announce_firsthit.enabled then
 				if _detalhes.announce_firsthit.enabled then
 					local needMsg = false
 					-- local isPetPull = false
@@ -648,27 +646,108 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 					end
 				end
 			end
-		else
-			--> entrar em combate se for dot e for do jogador e o ultimo combate ter sido a mais de 10 segundos atr�s
-			if token == "SPELL_PERIODIC_DAMAGE" and who_name == _detalhes.playername then
-				--> faz o calculo dos 10 segundos
-				if (_detalhes.last_combat_time + 2 < _tempo) then
-					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
-				end
-			elseif not (_bit_band(who_flags, REACTION_FRIENDLY) ~= 0 and _bit_band(alvo_flags, REACTION_FRIENDLY) ~= 0) and (_bit_band(who_flags, AFFILIATION_GROUP) ~= 0 or _bit_band(who_flags, AFFILIATION_GROUP) ~= 0) then
-				if (_detalhes.last_combat_time + 2 < _tempo) then
-					_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
-				end
-			end
 		end
 	end
-	--i = i+1
-	--print(i)
-	--[[statistics]]-- _detalhes.statistics.damage_calls = _detalhes.statistics.damage_calls + 1
+	-- if not _in_combat then
+	-- 	if token ~= "SPELL_PERIODIC_DAMAGE" then
+	-- 		if (IsInInstance()) then
+	-- 			if (_detalhes.last_combat_time + 2 < _tempo) then
+	-- 				_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+	-- 			end
+	-- 			if _detalhes.announce_firsthit.enabled then
+	-- 				local needMsg = false
+	-- 				-- local isPetPull = false
+	-- 				if spellid <= 10 then
+	-- 					PullTable.Link = _GetSpellInfo(spellid)
+	-- 				else
+	-- 					PullTable.Link = GetSpellLink(spellid)
+	-- 				end
+
+	-- 				if (_bit_band(who_flags,COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and _bit_band(alvo_flags,COMBATLOG_OBJECT_TYPE_NPC) ~= 0) then
+	-- 					--A player is attacking a mob
+	-- 					-- if _detalhes.announce_firsthit.enabled then
+	-- 					if not _detalhes.CachedGUIDToPull[alvo_serial] then
+	-- 						_detalhes.CachedGUIDToPull[alvo_serial] = true
+	-- 						PullTable.HitBy = "|cFFFFFF00 Первый удар|r: " ..(PullTable.Link or "") .. " от " ..(who_name or "Unknown") .." по ".. alvo_name
+	-- 						-- _detalhes:Msg(PullTable.HitBy)
+	-- 						needMsg = true
+	-- 					end
+	-- 				elseif (_bit_band(alvo_flags,COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and _bit_band(who_flags,COMBATLOG_OBJECT_TYPE_NPC) ~= 0)  then
+	-- 					--A mob is attacking a player
+	-- 					-- if  _detalhes.announce_firsthit.enabled then
+	-- 					if not _detalhes.CachedGUIDToPull[who_serial] then
+	-- 						_detalhes.CachedGUIDToPull[who_serial] = true
+	-- 						PullTable.HitBy = "|cFFFFFF00 Первый удар|r: " ..(PullTable.Link or "") .. " от " ..(who_name or "Unknown") .." по ".. alvo_name
+	-- 						-- _detalhes:Msg(PullTable.HitBy)
+	-- 						needMsg = true
+	-- 					end
+	-- 				elseif (_bit_band(who_flags,COMBATLOG_OBJECT_CONTROL_PLAYER) ~= 0 and _bit_band(alvo_flags,COMBATLOG_OBJECT_TYPE_NPC) ~= 0)	then
+	-- 					--Player's pet attacks a mob
+	-- 					-- if _detalhes.announce_firsthit.enabled then
+	-- 					if not _detalhes.CachedGUIDToPull[alvo_serial] then
+	-- 						_detalhes.CachedGUIDToPull[alvo_serial] = true
+	-- 						local whopet = parser:GetPetOwner(who_serial)
+
+	-- 						if (whopet == "Unknown") then
+	-- 							PullTable.WhoPull = who_name.." (pet)"
+	-- 						else
+	-- 							PullTable.WhoPull = whopet
+	-- 						end
+
+	-- 						PullTable.HitBy = "|cFFFFFF00 Первый удар|r: " ..(PullTable.Link or "") .. " от " ..(who_name or "Unknown") .. " (" .. PullTable.WhoPull..")" .." по ".. alvo_name
+	-- 						-- _detalhes:Msg(PullTable.HitBy)
+	-- 						needMsg = true
+	-- 						-- isPetPull = true
+	-- 					end
+	-- 				elseif (_bit_band(alvo_flags,COMBATLOG_OBJECT_CONTROL_PLAYER) ~= 0 and _bit_band(who_flags,COMBATLOG_OBJECT_TYPE_NPC) ~= 0) then
+	-- 					--Mob attacks a player's pet
+	-- 					-- if _detalhes.announce_firsthit.enabled then
+	-- 					if not _detalhes.CachedGUIDToPull[who_serial] then
+	-- 						_detalhes.CachedGUIDToPull[who_serial] = true
+	-- 						local whopet = parser:GetPetOwner(alvo_serial)
+
+	-- 						if (whopet == "Unknown") then
+	-- 							PullTable.WhoPull = alvo_name.." (pet)"
+	-- 						else
+	-- 							PullTable.WhoPull = whopet
+	-- 						end
+	-- 						PullTable.HitBy = "|cFFFFFF00 Первый удар|r: " ..(PullTable.Link or "") .. " от " ..(who_name or "Unknown") .." по ".. alvo_name .. " (" .. PullTable.WhoPull..")"
+	-- 						-- _detalhes:Msg(PullTable.HitBy)
+	-- 						needMsg = true
+	-- 						-- isPetPull = true
+	-- 					end
+	-- 				elseif ((who_flags and _bit_band (who_flags, AFFILIATION_GROUP) ~= 0 and _UnitAffectingCombat (who_name) )
+	-- 				or (alvo_flags and _bit_band (alvo_flags, AFFILIATION_GROUP) ~= 0 and _UnitAffectingCombat (alvo_name))
+	-- 				or (not _detalhes.in_group and who_flags and _bit_band (who_flags, AFFILIATION_GROUP) ~= 0)) then
+	-- 					-- if (_detalhes.encounter_table.id and _detalhes.encounter_table ["start"]  and _detalhes.announce_firsthit.enabled) then
+	-- 					if (_detalhes.encounter_table.id and _detalhes.encounter_table ["start"] >= GetTime() - 3) then
+	-- 						_detalhes:Msg( "|cFFFFFF00 Первый удар|r: " .. who_name.." по ".. alvo_name)
+	-- 					end
+	-- 				end
+	-- 				if needMsg then
+	-- 					_detalhes:Msg(PullTable.HitBy)
+	-- 				end
+	-- 			end
+	-- 		end
+	-- 	else
+	-- 		--> entrar em combate se for dot e for do jogador e o ultimo combate ter sido a mais de 10 segundos atr�s
+	-- 		if token == "SPELL_PERIODIC_DAMAGE" and who_name == _detalhes.playername then
+	-- 			--> faz o calculo dos 10 segundos
+	-- 			if (_detalhes.last_combat_time + 2 < _tempo) then
+	-- 				_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+	-- 			end
+	-- 		elseif not (_bit_band(who_flags, REACTION_FRIENDLY) ~= 0 and _bit_band(alvo_flags, REACTION_FRIENDLY) ~= 0) and (_bit_band(who_flags, AFFILIATION_GROUP) ~= 0 or _bit_band(who_flags, AFFILIATION_GROUP) ~= 0) then
+	-- 			if (_detalhes.last_combat_time + 2 < _tempo) then
+	-- 				_detalhes:StartCombat(who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
+
 
 	_current_damage_container.need_refresh = true
-	--i = i+1
-	--print(i)
+	
+
 	------------------------------------------------------------------------------------------------
 	--> get actors
 	--> source damager
@@ -708,8 +787,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		who_name = who_name.." <"..meu_dono.nome..">"
 		-- print(who_name)
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	--> his target
 	local jogador_alvo, alvo_dono = damage_cache[alvo_serial] or damage_cache_pets[alvo_serial] or damage_cache[alvo_name], damage_cache_petsOwners[alvo_serial]
 	if not jogador_alvo then
@@ -734,8 +813,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 		--> � um pet
 		alvo_name = alvo_name.." <"..alvo_dono.nome..">"
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	--> last event
 	este_jogador.last_event = _tempo
 
@@ -755,8 +834,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			amount = amount - overkill
 		end
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	if este_jogador.grupo and not este_jogador.arena_enemy and not este_jogador.enemy then --> source = friendly player and not an enemy player
 		--dano to adversario estava caindo aqui por nao estar checando .enemy
 		_current_gtotal[1] = _current_gtotal[1] + amount
@@ -794,8 +873,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			t.n = i
 		end
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	------------------------------------------------------------------------------------------------
 	--> time start
 	if not este_jogador.dps_started then
@@ -829,8 +908,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			end
 		end
 	end
-	--i = i+1
-	--print(i)
+	
+	
 	------------------------------------------------------------------------------------------------
 	--> firendly fire ~friendlyfire
 		local is_friendly_fire = false
@@ -935,8 +1014,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			-- 	meu_dono.raid_targets [alvo_flags] = (meu_dono.raid_targets [alvo_flags] or 0) + amount
 			-- end
 		end
-		-- --i = i+1
-		-- --print(i)
+		-- 
+		-- 
 		-- print(alvo_flags, 724)
 		--> raid targets
 		este_jogador.raid_targets = este_jogador.raid_targets or {}
@@ -987,8 +1066,8 @@ function parser:spell_dmg(token, time, who_serial, who_name, who_flags, alvo_ser
 			_current_combat_cleu_events.n = _current_combat_cleu_events.n + 1
 		end
 
-		-- --i = i+1
-		-- --print(i)
+		-- 
+		-- 
 		return spell_damage_func(spell, alvo_serial, alvo_name, alvo_flags, amount, who_name, resisted, blocked, absorbed, critical, glacing, token)
 end
 	--function parser:swingmissed(token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, missType, amountMissed)
@@ -1487,13 +1566,13 @@ function parser:heal(token, time, who_serial, who_name, who_flags, alvo_serial, 
 ------------------------------------------------------------------------------------------------
 --> early checks and fixes
 
-	if(not _in_combat) then
+	if (not _in_combat and _detalhes.SirusCustom.EnterInCombatWhenHeal) or (_detalhes.last_combat_time + 30 < _tempo) then
 		-- if(not _in_resting_zone) then
 		-- 	return
 		-- end
-		if _detalhes.last_combat_time + 30 < _tempo then
+		-- if _detalhes.last_combat_time + 30 < _tempo then
 			return
-		end
+		-- end
 	end
 
 	--> check invalid serial against pets

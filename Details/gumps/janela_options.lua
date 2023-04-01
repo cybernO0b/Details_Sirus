@@ -10177,6 +10177,7 @@ function window:CreateFrame10()
 		end
 
 		window:CreateLineBackground2 (frame10, "writeAllAurasSlider", "writeAllAurasLabel", Loc ["WriteAllAurasDesc"] )
+		
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10763,7 +10764,18 @@ function window:CreateFrame11()
 			-- _detalhes:SendOptionsModifiedEvent (DetailsOptionsWindow.instance)
 		end
 		window:CreateLineBackground2 (frame11, "AnnouncersCustomSlider1", "AnnouncersCustomLabel", Loc ["MurozondDmgSkipDesc"])
+
+		-- EnterInCombatWhenHeal
+		g:NewLabel (frame11, _, "$parentAnnouncersCustomLabel", "AnnouncersCustomLabel1", Loc ["EnterInCombatWhenHeal"], "GameFontHighlightLeft")
 		
+		g:NewSwitch (frame11, _, "$parentAnnouncersCustomSlider2", "AnnouncersCustomSlider2", 60, 20, _, _, _detalhes.SirusCustom.EnterInCombatWhenHeal, nil, nil, nil, nil, options_switch_template)
+		frame11.AnnouncersCustomSlider2:SetPoint ("left", frame11.AnnouncersCustomLabel1, "right", 2)
+		frame11.AnnouncersCustomSlider2:SetAsCheckBox()
+		frame11.AnnouncersCustomSlider2.OnSwitch = function (_, _, value)
+			_detalhes.SirusCustom.EnterInCombatWhenHeal = value
+			-- _detalhes:SendOptionsModifiedEvent (DetailsOptionsWindow.instance)
+		end
+		window:CreateLineBackground2 (frame11, "AnnouncersCustomSlider2", "AnnouncersCustomLabel1", Loc ["EnterInCombatWhenHealDesc"])
 	--> anchors
 
 		--announcers anchor
@@ -10794,6 +10806,9 @@ function window:CreateFrame11()
 			{"CooldownChannelLabel", 9},
 			{"CooldownCustomLabel", 10},
 			{"CooldownIgnoreButton", 11},
+			{"AnnouncersCustom", 12, true},
+			{"AnnouncersCustomLabel", 13},
+			{"AnnouncersCustomLabel1", 14},
 
 		}
 
@@ -10815,8 +10830,7 @@ function window:CreateFrame11()
 			{"EnabledPrePotLabel", 7},
 			{"EnabledFirstHitLabel", 8},
 			{"ShowDeathMenuLabel", 9},
-			{"AnnouncersCustom", 7, true},
-			{"AnnouncersCustomLabel", 8},
+
 		}
 
 		window:arrange_menu (frame11, right_side, window.right_start_at, window.top_start_at)

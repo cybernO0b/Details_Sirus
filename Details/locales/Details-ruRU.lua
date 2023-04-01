@@ -1777,6 +1777,8 @@ L["Healing by Encounter Phase"] = "Хил по фазам"
 -----------------custom sirus
 L["MurozondDmgSkip"] = "Мурозонд: без урона по щиту"
 L["MurozondDmgSkipDesc"] = "Не считать урон в щит при перефазе мурозонда"
+L["EnterInCombatWhenHeal"] = "Входить в бой при хиле"
+L["EnterInCombatWhenHealDesc"] = "Входить в бой при исцелении"
 L["WriteAllAuras"] = "Записывать все ауры"
 L["WriteAllAurasDesc"] = "Записывает все ауры в бафы и дебафы когда это возможно\n ВНИМАНИЕ!\n Будет использоваться больше памяти"
 L["Auras"] = "Ауры"
