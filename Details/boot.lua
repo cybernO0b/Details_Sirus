@@ -83,6 +83,8 @@ do
 				[530] = true, -- Ulduar
 				[925] = true, -- The Bronze Sanctuary
 				[914] = true, -- zort
+				[864] = true, -- hijal
+
 			}
 
 			--must fail in map and encounter id to not store data
@@ -202,6 +204,12 @@ do
 				[70010] = 1, --norigorn
 				--zort
 				[50702] = 1, --zort
+				--hijal
+				[17767] = 1,
+				[17808] = 2,
+				[17888] = 3,
+				[17842] = 4,
+				[17968] = 5,
 
 			}
 
