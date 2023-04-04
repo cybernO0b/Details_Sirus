@@ -2016,14 +2016,16 @@ function _detalhes:AtualizaSegmentos_AfterCombat (instancia, historico)
 
 	elseif (segmento < _detalhes.segments_amount and segmento > 0) then
 		instancia.showing = historico.tabelas [segmento]
-		--print ("==> Changing the Segment now! - classe_instancia.lua 1952")
+		if instancia.showing then
+			--print ("==> Changing the Segment now! - classe_instancia.lua 1952")
 
-		gump:Fade (instancia, _fadeType, _fadeSpeed, "barras") --"in", nil
-		instancia.showing[instancia.atributo].need_refresh = true
-		instancia.v_barras = true
-		instancia:ResetaGump()
-		instancia:AtualizaGumpPrincipal (true)
-		_detalhes:AtualizarJanela (instancia)
+			gump:Fade (instancia, _fadeType, _fadeSpeed, "barras") --"in", nil
+			instancia.showing[instancia.atributo].need_refresh = true
+			instancia.v_barras = true
+			instancia:ResetaGump()
+			instancia:AtualizaGumpPrincipal (true)
+			_detalhes:AtualizarJanela (instancia)
+		end
 	end
 
 end
