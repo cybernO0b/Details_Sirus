@@ -452,52 +452,66 @@ end
 
 --------end of ToK functions----
 
---from weakauras, list of functions to block on scripts
---source https://github.com/WeakAuras/WeakAuras2/blob/520951a4b49b64cb49d88c1a8542d02bbcdbe412/WeakAuras/AuraEnvironment.lua#L66
-local blockedFunctions = {
-	-- Lua functions that may allow breaking out of the environment
-	getfenv = true,
-	setfenv = true,
-	loadstring = true,
-	pcall = true,
-	xpcall = true,
-	getglobal = true,
+		--source https://github.com/WeakAuras/WeakAuras2/blob/520951a4b49b64cb49d88c1a8542d02bbcdbe412/WeakAuras/AuraEnvironment.lua#L66
+		local blockedFunctions = {
+			-- Lua functions that may allow breaking out of the environment
+			setfenv = true,
+			getfenv = true,
+			loadstring = true,
+			pcall = true,
+			xpcall = true,
+			getglobal = true,
 
-	-- blocked WoW API
-	SendMail = true,
-	SetTradeMoney = true,
-	AddTradeMoney = true,
-	PickupTradeMoney = true,
-	PickupPlayerMoney = true,
-	TradeFrame = true,
-	MailFrame = true,
-	EnumerateFrames = true,
-	RunScript = true,
-	AcceptTrade = true,
-	SetSendMailMoney = true,
-	EditMacro = true,
-	SlashCmdList = true,
-	DevTools_DumpCommand = true,
-	hash_SlashCmdList = true,
-	CreateMacro = true,
-	SetBindingMacro = true,
-	GuildDisband = true,
-	GuildUninvite = true,
-	securecall = true,
+			-- blocked WoW API
+			SendMail = true,
+			SetTradeMoney = true,
+			AddTradeMoney = true,
+			PickupTradeMoney = true,
+			PickupPlayerMoney = true,
+			TradeFrame = true,
+			MailFrame = true,
+			EnumerateFrames = true,
+			RunScript = true,
+			AcceptTrade = true,
+			SetSendMailMoney = true,
+			EditMacro = true,
+			SlashCmdList = true,
+			DevTools_DumpCommand = true,
+			hash_SlashCmdList = true,
+			CreateMacro = true,
+			SetBindingMacro = true,
+			GuildDisband = true,
+			GuildUninvite = true,
+			securecall = true,
+			DeleteCursorItem = true,
+			ChatEdit_SendText = true,
+			CastSpellByName = true,
+			CastSpell = true,
+			CastSpellByID = true,
 
-	--additional
-	setmetatable = true,
-}
-
-local functionFilter = setmetatable({}, {__index = function(env, key)
-	if key == "_G" then
-		return env
-	elseif blockedFunctions[key] then
-		return nil
-	else
-		return _G[key]
-	end
-end})
+			--additional
+			setmetatable = true,
+		}
+		local blockedTables = {
+			SlashCmdList = true,
+			SendMailMailButton = true,
+			SendMailMoneyGold = true,
+			MailFrameTab2 = true,
+			ChatFrame1 = true,
+			WeakAurasOptions = true,
+			WeakAurasOptionsSaved = true
+		}
+		local functionFilter = setmetatable({}, {__index = function(env, key)
+			if key == "_G" then
+				return env
+			elseif blockedFunctions[key] then
+				return nil
+			elseif blockedTables[key] then
+				return {}
+			else
+				return _G[key]
+			end
+		end})
 
 --> replacing data for custom texts
 _detalhes.string = {}
@@ -740,7 +754,7 @@ do
 
 	-- logic OR for number values
 	local function lor(x,y)
-		local result = 0
+		result = 0
 		for p=1,8 do result = result +(((bit(x,p) or bit(y,p)) == true) and 2^(p-1) or 0) end
 		return result
 	end

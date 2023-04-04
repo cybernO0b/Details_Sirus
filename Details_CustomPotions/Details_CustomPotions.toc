@@ -1,8 +1,0 @@
-## Interface: 30300
-## Title: Details!: Potions (plugin)
-## Notes: Shows who uses potions
-## Notes-ruRU: Показывает кто использует поты в бою
-## DefaultState: Enabled
-## RequiredDeps: Details
-
-Details_CustomPotions.lua

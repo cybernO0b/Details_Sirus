@@ -1191,134 +1191,6 @@ function _detalhes:InstallCustomObject(object)
 end
 
 function _detalhes:AddDefaultCustomDisplays()
-	local PotionUsed = {
-		name = Loc["STRING_CUSTOM_POT_DEFAULT"],
-		icon =[[Interface\ICONS\INV_Potion_03]],
-		attribute = false,
-		spellid = false,
-		author = "Details!",
-		desc = Loc["STRING_CUSTOM_POT_DEFAULT_DESC"],
-		source = false,
-		target = false,
-		script_version = 6,
-		script =[[
-			--init:
-			local combat, instance_container, instance = ...
-			local total, top, amount = 0, 0, 0
-
-			--get the misc actor container
-			local misc_container = combat:GetActorList( DETAILS_ATTRIBUTE_MISC )
-
-			--do the loop:
-			for _, player in ipairs( misc_container ) do
-
-				--only player in group
-				if(player:IsGroupPlayer()) then
-
-					local found_potion = false
-
-					--get the spell debuff uptime container
-					local debuff_uptime_container = player.debuff_uptime and player.debuff_uptime_spells and player.debuff_uptime_spells._ActorTable
-					if(debuff_uptime_container) then
-						--potion of focus(can't use as pre-potion, so, its amount is always 1
-						local focus_potion = debuff_uptime_container[DETAILS_FOCUS_POTION_ID]
-
-						if(focus_potion) then
-							total = total + 1
-							found_potion = true
-							if(top < 1) then
-								top = 1
-							end
-							--add amount to the player
-							instance_container:AddValue(player, 1)
-						end
-					end
-
-					--get the spell buff uptime container
-					local buff_uptime_container = player.buff_uptime and player.buff_uptime_spells and player.buff_uptime_spells._ActorTable
-					if(buff_uptime_container) then
-						for spellId, _ in pairs(DetailsFramework.PotionIDs) do
-							local potionUsed = buff_uptime_container[spellId]
-
-							if(potionUsed) then
-								local used = potionUsed.activedamt
-								if(used and used > 0) then
-									total = total + used
-									found_potion = true
-									if(used > top) then
-										top = used
-									end
-
-									--add amount to the player
-									instance_container:AddValue(player, used)
-								end
-							end
-						end
-					end
-
-					if(found_potion) then
-						amount = amount + 1
-					end
-				end
-			end
-
-			--return:
-			return total, top, amount
-			]],
-
-		tooltip =[[
-		--init:
-		local player, combat, instance = ...
-
-		--get the debuff container for potion of focus
-		local debuff_uptime_container = player.debuff_uptime and player.debuff_uptime_spells and player.debuff_uptime_spells._ActorTable
-		if(debuff_uptime_container) then
-			local focus_potion = debuff_uptime_container[DETAILS_FOCUS_POTION_ID]
-			if(focus_potion) then
-			local name, _, icon = GetSpellInfo(DETAILS_FOCUS_POTION_ID)
-			GameCooltip:AddLine(name, 1) --> can use only 1 focus potion(can't be pre-potion)
-			_detalhes:AddTooltipBackgroundStatusbar()
-			GameCooltip:AddIcon(icon, 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
-			end
-		end
-
-		--get the misc actor container
-		local buff_uptime_container = player.buff_uptime and player.buff_uptime_spells and player.buff_uptime_spells._ActorTable
-		if(buff_uptime_container) then
-			for spellId, _ in pairs(DetailsFramework.PotionIDs) do
-				local potionUsed = buff_uptime_container[spellId]
-
-				if(potionUsed) then
-					local name, _, icon = GetSpellInfo(spellId)
-					GameCooltip:AddLine(name, potionUsed.activedamt)
-					_detalhes:AddTooltipBackgroundStatusbar()
-					GameCooltip:AddIcon(icon, 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
-				end
-			end
-		end
-		]]
-	}
-
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_POT_DEFAULT"] and(custom.script_version and custom.script_version >= PotionUsed.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_POT_DEFAULT"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(PotionUsed, _detalhes.atributo_custom)
-	-- 	PotionUsed.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = PotionUsed
-	-- end
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---		/run _detalhes:AddDefaultCustomDisplays()
 
 		local Healthstone = {
 		name = Loc["STRING_CUSTOM_HEALTHSTONE_DEFAULT"],
@@ -1394,26 +1266,7 @@ function _detalhes:AddDefaultCustomDisplays()
 		total_script = false,
 		script_version = 15,
 	}
---	/run _detalhes:AddDefaultCustomDisplays()
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_HEALTHSTONE_DEFAULT"] and(custom.script_version and custom.script_version >= Healthstone.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_HEALTHSTONE_DEFAULT"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(Healthstone, _detalhes.atributo_custom)
-	-- 	Healthstone.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = Healthstone
-	-- end
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	_detalhes:InstallCustomObject(Healthstone)
 
 	local DamageActivityTime = {
 		name = Loc["STRING_CUSTOM_ACTIVITY_DPS"],
@@ -1460,24 +1313,8 @@ function _detalhes:AddDefaultCustomDisplays()
 
 		]],
 	}
+	_detalhes:InstallCustomObject(DamageActivityTime)
 
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_ACTIVITY_DPS"] and(custom.script_version and custom.script_version >= DamageActivityTime.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_ACTIVITY_DPS"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(DamageActivityTime, _detalhes.atributo_custom)
-	-- 	DamageActivityTime.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = DamageActivityTime
-	-- end
 
 	local HealActivityTime = {
 		name = Loc["STRING_CUSTOM_ACTIVITY_HPS"],
@@ -1525,28 +1362,8 @@ function _detalhes:AddDefaultCustomDisplays()
 		]],
 	}
 
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_ACTIVITY_HPS"] and(custom.script_version and custom.script_version >= HealActivityTime.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_ACTIVITY_HPS"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(HealActivityTime, _detalhes.atributo_custom)
-	-- 	HealActivityTime.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = HealActivityTime
-	-- end
+	_detalhes:InstallCustomObject(HealActivityTime)
 
----------------------------------------
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
-	--doas
 	local CC_Done = {
 		name = Loc["STRING_CUSTOM_CC_DONE"],
 		icon =[[Interface\ICONS\Spell_Frost_FreezingBreath]],
@@ -1624,32 +1441,7 @@ function _detalhes:AddDefaultCustomDisplays()
 		]],
 	}
 
---		/run _detalhes:AddDefaultCustomDisplays()
-
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_CC_DONE"] and(custom.script_version and custom.script_version >= CC_Done.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	setmetatable(CC_Done, _detalhes.atributo_custom)
-	-- 	CC_Done.__index = _detalhes.atributo_custom
-
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_CC_DONE"]) then
-	-- 			table.remove(self.custom, i)
-	-- 			tinsert(self.custom, i, CC_Done)
-	-- 			have = true
-	-- 		end
-	-- 	end
-	-- 	if(not have) then
-	-- 		self.custom[#self.custom+1] = CC_Done
-	-- 	end
-	-- end
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
+	_detalhes:InstallCustomObject(CC_Done)
 
 	local CC_Received = {
 		name = Loc["STRING_CUSTOM_CC_RECEIVED"],
@@ -1758,36 +1550,11 @@ function _detalhes:AddDefaultCustomDisplays()
 		]],
 	}
 
---		/run _detalhes:AddDefaultCustomDisplays()
-
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_CC_RECEIVED"] and(custom.script_version and custom.script_version >= CC_Received.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	setmetatable(CC_Received, _detalhes.atributo_custom)
-	-- 	CC_Received.__index = _detalhes.atributo_custom
-
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_CC_RECEIVED"]) then
-	-- 			table.remove(self.custom, i)
-	-- 			tinsert(self.custom, i, CC_Received)
-	-- 			have = true
-	-- 		end
-	-- 	end
-	-- 	if(not have) then
-	-- 		self.custom[#self.custom+1] = CC_Received
-	-- 	end
-	-- end
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
+	_detalhes:InstallCustomObject(CC_Received)
 
 	local MySpells = {
 		name = Loc["STRING_CUSTOM_MYSPELLS"],
-		icon =[[Interface\CHATFRAME\UI-ChatIcon-Battlenet]],
+		icon =[[Interface\Icons\Spell_Fire_FlameShock]],
 		attribute = false,
 		spellid = false,
 		author = "Details!",
@@ -2043,122 +1810,68 @@ function _detalhes:AddDefaultCustomDisplays()
 		]],
 	}
 
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_MYSPELLS"] and(custom.script_version and custom.script_version >= MySpells.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	setmetatable(MySpells, _detalhes.atributo_custom)
-	-- 	MySpells.__index = _detalhes.atributo_custom
+	_detalhes:InstallCustomObject(MySpells)
 
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_MYSPELLS"]) then
-	-- 			table.remove(self.custom, i)
-	-- 			tinsert(self.custom, i, MySpells)
-	-- 			have = true
-	-- 		end
-	-- 	end
-	-- 	if(not have) then
-	-- 		self.custom[#self.custom+1] = MySpells
-	-- 	end
-	-- end
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
-
-	local DamageOnSkullTarget = {
-		name = Loc["STRING_CUSTOM_DAMAGEONSKULL"],
-		icon =[[Interface\TARGETINGFRAME\UI-RaidTargetingIcon_8]],
+	local DmgAtSkull = {
+		name = "Урон в череп",
+		icon = [[Interface\TARGETINGFRAME\UI-RaidTargetingIcon_8]],
+		source = false,
 		attribute = false,
 		spellid = false,
-		author = "Details!",
-		desc = Loc["STRING_CUSTOM_DAMAGEONSKULL_DESC"],
-		source = false,
 		target = false,
-		script_version = 3,
-		script =[[
+		author = "fxpw",
+		desc = "DmgAtSkull",
+		script_version = 5,
+		script = [[
 			--get the parameters passed
 			local Combat, CustomContainer, Instance = ...
 			--declade the values to return
 			local total, top, amount = 0, 0, 0
-
+	
 			--raid target flags:
-			-- 128: skull
-			-- 64: cross
-			-- 32: square
-			-- 16: moon
-			-- 8: triangle
-			-- 4: diamond
-			-- 2: circle
-			-- 1: star
-
+			-- skull
+			-- cross
+			-- square
+			-- moon
+			-- triangle
+			-- diamond
+			-- circle
+			-- star
+	
 			--do the loop
 			for _, actor in ipairs(Combat:GetActorList(DETAILS_ATTRIBUTE_DAMAGE)) do
-				if(actor:IsPlayer()) then
-					if(actor.raid_targets[128]) then
-						CustomContainer:AddValue(actor, actor.raid_targets[128])
+				if (actor:IsPlayer()) then
+					for k,v in pairs (actor.raid_targets) do
+						if k == "skull" then
+							CustomContainer:AddValue(actor, v)
+						end
 					end
 				end
 			end
-
-			--if not managed inside the loop, get the values of total, top and amount
+	
 			total, top = CustomContainer:GetTotalAndHighestValue()
 			amount = CustomContainer:GetNumActors()
-
+	
 			--return the values
 			return total, top, amount
+	
+	
+		]],
+		total_script = [[
+			local value, top, total, combat, instance = ...
+			return value
+		]],
+		percent_script = [[
+			local value, top, total, combat, instance = ...
+			return string.format("%2.f",(value/total)*100)
 		]],
 		tooltip =[[
-			--get the parameters passed
-			local actor, combat, instance = ...
-
-			--get the cooltip object(we dont use the convencional GameTooltip here)
-			local GameCooltip = GameCooltip
-
-			--Cooltip code
-			local format_func = Details:GetCurrentToKFunction()
-
-			--Cooltip code
-			local RaidTargets = actor.raid_targets
-
-			local DamageOnStar = RaidTargets[128]
-			if(DamageOnStar) then
-				--RAID_TARGET_8 is the built-in localized word for 'Skull'.
-				GameCooltip:AddLine(RAID_TARGET_8 .. ":", format_func(_, DamageOnStar))
-				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_8", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
-				Details:AddTooltipBackgroundStatusbar()
-			end
-		]],
+	
+			]],
+		-- notooltip = false,
 	}
 
---		/run _detalhes:AddDefaultCustomDisplays()
-
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_DAMAGEONSKULL"] and(custom.script_version and custom.script_version >= DamageOnSkullTarget.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	setmetatable(DamageOnSkullTarget, _detalhes.atributo_custom)
-	-- 	DamageOnSkullTarget.__index = _detalhes.atributo_custom
-
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_DAMAGEONSKULL"]) then
-	-- 			table.remove(self.custom, i)
-	-- 			tinsert(self.custom, i, DamageOnSkullTarget)
-	-- 			have = true
-	-- 		end
-	-- 	end
-	-- 	if(not have) then
-	-- 		self.custom[#self.custom+1] = DamageOnSkullTarget
-	-- 	end
-	-- end
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
+	_detalhes:InstallCustomObject(DmgAtSkull)
 
 	local DamageOnAnyTarget = {
 		name = Loc["STRING_CUSTOM_DAMAGEONANYMARKEDTARGET"],
@@ -2170,35 +1883,48 @@ function _detalhes:AddDefaultCustomDisplays()
 		source = false,
 		target = false,
 		script_version = 3,
-		script =[[
+		script = [[
 			--get the parameters passed
 			local Combat, CustomContainer, Instance = ...
 			--declade the values to return
 			local total, top, amount = 0, 0, 0
-
+	
+			--raid target flags:
+			-- skull
+			-- cross
+			-- square
+			-- moon
+			-- triangle
+			-- diamond
+			-- circle
+			-- star
+	
 			--do the loop
 			for _, actor in ipairs(Combat:GetActorList(DETAILS_ATTRIBUTE_DAMAGE)) do
-				if(actor:IsPlayer()) then
-				local total =(actor.raid_targets[1] or 0) --star
-				total = total +(actor.raid_targets[2] or 0) --circle
-				total = total +(actor.raid_targets[4] or 0) --diamond
-				total = total +(actor.raid_targets[8] or 0) --tiangle
-				total = total +(actor.raid_targets[16] or 0) --moon
-				total = total +(actor.raid_targets[32] or 0) --square
-				total = total +(actor.raid_targets[64] or 0) --cross
-
-				if(total > 0) then
-					CustomContainer:AddValue(actor, total)
-				end
+				if (actor:IsPlayer()) then
+					for k,v in pairs (actor.raid_targets) do
+						-- if k == "skull" then
+							CustomContainer:AddValue(actor, v)
+						-- end
+					end
 				end
 			end
-
-			--if not managed inside the loop, get the values of total, top and amount
+	
 			total, top = CustomContainer:GetTotalAndHighestValue()
 			amount = CustomContainer:GetNumActors()
-
+	
 			--return the values
 			return total, top, amount
+	
+	
+		]],
+		total_script = [[
+			local value, top, total, combat, instance = ...
+			return value
+		]],
+		percent_script = [[
+			local value, top, total, combat, instance = ...
+			return string.format("%2.f",(value/total)*100)
 		]],
 		tooltip =[[
 			--get the parameters passed
@@ -2212,49 +1938,49 @@ function _detalhes:AddDefaultCustomDisplays()
 			--Cooltip code
 			local RaidTargets = actor.raid_targets
 
-			local DamageOnStar = RaidTargets[1]
+			local DamageOnStar = RaidTargets["star"]
 			if(DamageOnStar) then
 				GameCooltip:AddLine(RAID_TARGET_1 .. ":", format_func(_, DamageOnStar))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_1", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnCircle = RaidTargets[2]
+			local DamageOnCircle = RaidTargets["circle"]
 			if(DamageOnCircle) then
 				GameCooltip:AddLine(RAID_TARGET_2 .. ":", format_func(_, DamageOnCircle))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_2", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnDiamond = RaidTargets[4]
+			local DamageOnDiamond = RaidTargets["diamond"]
 			if(DamageOnDiamond) then
 				GameCooltip:AddLine(RAID_TARGET_3 .. ":", format_func(_, DamageOnDiamond))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_3", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnTriangle = RaidTargets[8]
+			local DamageOnTriangle = RaidTargets["triangle"]
 			if(DamageOnTriangle) then
 				GameCooltip:AddLine(RAID_TARGET_4 .. ":", format_func(_, DamageOnTriangle))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_4", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnMoon = RaidTargets[16]
+			local DamageOnMoon = RaidTargets["moon"]
 			if(DamageOnMoon) then
 				GameCooltip:AddLine(RAID_TARGET_5 .. ":", format_func(_, DamageOnMoon))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_5", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnSquare = RaidTargets[32]
+			local DamageOnSquare = RaidTargets["squere"]
 			if(DamageOnSquare) then
 				GameCooltip:AddLine(RAID_TARGET_6 .. ":", format_func(_, DamageOnSquare))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_6", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
 				Details:AddTooltipBackgroundStatusbar()
 			end
 
-			local DamageOnCross = RaidTargets[64]
+			local DamageOnCross = RaidTargets["cross"]
 			if(DamageOnCross) then
 				GameCooltip:AddLine(RAID_TARGET_7 .. ":", format_func(_, DamageOnCross))
 				GameCooltip:AddIcon("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_7", 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
@@ -2263,35 +1989,7 @@ function _detalhes:AddDefaultCustomDisplays()
 		]],
 	}
 
---		/run _detalhes:AddDefaultCustomDisplays()
-
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_DAMAGEONANYMARKEDTARGET"] and(custom.script_version and custom.script_version >= DamageOnAnyTarget.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	setmetatable(DamageOnAnyTarget, _detalhes.atributo_custom)
-	-- 	DamageOnAnyTarget.__index = _detalhes.atributo_custom
-
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_DAMAGEONANYMARKEDTARGET"]) then
-	-- 			table.remove(self.custom, i)
-	-- 			tinsert(self.custom, i, DamageOnAnyTarget)
-	-- 			have = true
-	-- 		end
-	-- 	end
-	-- 	if(not have) then
-	-- 		self.custom[#self.custom+1] = DamageOnAnyTarget
-	-- 	end
-	-- end
-
-	----------------------------------------------------------------------------------------------------------------------------------------------------
-
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	_detalhes:InstallCustomObject(DamageOnAnyTarget)
 
 	local DynamicOverallDamage = {
 		name = Loc["STRING_CUSTOM_DYNAMICOVERAL"], --"Dynamic Overall Damage",
@@ -2422,38 +2120,19 @@ function _detalhes:AddDefaultCustomDisplays()
 			return s
 		]],
 	}
+	_detalhes:InstallCustomObject(DynamicOverallDamage)
 
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_DYNAMICOVERAL"] and(custom.script_version and custom.script_version >= DynamicOverallDamage.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_DYNAMICOVERAL"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(DynamicOverallDamage, _detalhes.atributo_custom)
-	-- 	DynamicOverallDamage.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = DynamicOverallDamage
-	-- end
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	local DamageOnShields = {
-		name = Loc["STRING_CUSTOM_DAMAGEONSHIELDS"],
-		icon =[[Interface\ICONS\Spell_Holy_PowerWordShield]],
+	local DmgAtShields = {
+		name = "Урон по щитам",
+		icon = [[Interface\Icons\Spell_Holy_PowerWordShield]],
+		source = false,
 		attribute = false,
 		spellid = false,
-		author = "Details!",
-		desc = "Damage done to shields",
-		source = false,
 		target = false,
-		script_version = 1,
-		script =[[
+		author = "fxpw",
+		desc = "Shows dmg at shields",
+		script_version = 3,
+		script = [[
 			--get the parameters passed
 			local Combat, CustomContainer, Instance = ...
 			--declade the values to return
@@ -2462,21 +2141,21 @@ function _detalhes:AddDefaultCustomDisplays()
 			--do the loop
 			for index, actor in ipairs(Combat:GetActorList(1)) do
 				if(actor:IsPlayer()) then
-
-				--get the actor total damage absorbed
-				local totalAbsorb = actor.totalabsorbed
-
-				--get the damage absorbed by all the actor pets
-				for petIndex, petName in ipairs(actor.pets) do
-					local pet = Combat :GetActor(1, petName)
-					if(pet) then
-					totalAbsorb = totalAbsorb + pet.totalabsorbed
+					
+					--get the actor total damage absorbed
+					local totalAbsorb = actor.totalabsorbed
+					
+					--get the damage absorbed by all the actor pets
+					for petIndex, petName in ipairs(actor.pets) do
+						local pet = Combat :GetActor(1, petName)
+						if(pet) then
+							totalAbsorb = totalAbsorb + pet.totalabsorbed
+						end
 					end
-				end
-
-				--add the value to the actor on the custom container
-				CustomContainer:AddValue(actor, totalAbsorb)
-
+					
+					--add the value to the actor on the custom container
+					CustomContainer:AddValue(actor, totalAbsorb)
+					
 				end
 			end
 			--loop end
@@ -2487,8 +2166,20 @@ function _detalhes:AddDefaultCustomDisplays()
 
 			--return the values
 			return total, top, amount
+		
 		]],
-		tooltip =[[
+		total_script = [[
+
+			local value, top, total, combat, instance = ...
+			return value	
+		]],
+		percent_script = [[
+
+			local value, top, total, combat, instance = ...
+			return string.format("%.2f",(value/total)*100)
+		]],
+		tooltip =[[			
+
 			--get the parameters passed
 			local actor, Combat, instance = ...
 
@@ -2504,7 +2195,7 @@ function _detalhes:AddDefaultCustomDisplays()
 			for petIndex, petName in ipairs(actor.pets) do
 				local pet = Combat :GetActor(1, petName)
 				if(pet) then
-				totalAbsorb = totalAbsorb + pet.totalabsorbed
+					totalAbsorb = totalAbsorb + pet.totalabsorbed
 				end
 			end
 
@@ -2514,34 +2205,242 @@ function _detalhes:AddDefaultCustomDisplays()
 			for petIndex, petName in ipairs(actor.pets) do
 				local pet = Combat :GetActor(1, petName)
 				if(pet) then
-				totalAbsorb = totalAbsorb + pet.totalabsorbed
-
-				GameCooltip:AddLine(petName, format_func(_, pet.totalabsorbed))
-				Details:AddTooltipBackgroundStatusbar()
-
+					totalAbsorb = totalAbsorb + pet.totalabsorbed
+					GameCooltip:AddLine(petName, format_func(_, pet.totalabsorbed))
+					Details:AddTooltipBackgroundStatusbar()				
 				end
-			end
-		]],
+			end	
+			
+		]]
 	}
 
-	-- local have = false
-	-- for _, custom in ipairs(self.custom) do
-	-- 	if(custom.name == Loc["STRING_CUSTOM_DAMAGEONSHIELDS"] and(custom.script_version and custom.script_version >= DamageOnShields.script_version) ) then
-	-- 		have = true
-	-- 		break
-	-- 	end
-	-- end
-	-- if(not have) then
-	-- 	for i, custom in ipairs(self.custom) do
-	-- 		if(custom.name == Loc["STRING_CUSTOM_DAMAGEONSHIELDS"]) then
-	-- 			table.remove(self.custom, i)
-	-- 		end
-	-- 	end
-	-- 	setmetatable(DamageOnShields, _detalhes.atributo_custom)
-	-- 	DamageOnShields.__index = _detalhes.atributo_custom
-	-- 	self.custom[#self.custom+1] = DamageOnShields
-	-- end
+	_detalhes:InstallCustomObject(DmgAtShields)
 
+	local PotionUsed = {
+		name = "Зелья",
+		icon = [[Interface\Icons\INV_Alchemy_Elixir_02]],
+		source = false,
+		attribute = false,
+		spellid = false,
+		target = false,
+		author = "fxpw",
+		desc = "Shows who uses potions",
+		script_version = 8,
+		script = [[
+			--init:
+			local combat, instance_container, instance = ...
+			local total, top, amount = 0, 0, 0
+	
+			--get the misc actor container
+			local misc_container = combat:GetActorList( DETAILS_ATTRIBUTE_MISC )
+	
+			--do the loop:
+			for _, player in ipairs( misc_container ) do
+				
+				--only player in group
+				if(player:IsGroupPlayer()) then
+					
+					local found_potion = false
+					
+					--get the spell debuff uptime container
+					local debuff_uptime_container = player.debuff_uptime and player.debuff_uptime_spells and player.debuff_uptime_spells._ActorTable
+					if(debuff_uptime_container) then
+						--potion of focus(can't use as pre-potion, so, its amount is always 1
+						local focus_potion = debuff_uptime_container[DETAILS_FOCUS_POTION_ID]
+						
+						if(focus_potion) then
+							total = total + 1
+							found_potion = true
+							if(top < 1) then
+								top = 1
+							end
+							--add amount to the player
+							instance_container:AddValue(player, 1)
+						end
+					end
+					
+					--get the spell buff uptime container
+					local buff_uptime_container = player.buff_uptime and player.buff_uptime_spells and player.buff_uptime_spells._ActorTable
+					if(buff_uptime_container) then
+						for spellId, _ in pairs(DetailsFramework.PotionIDs) do
+							local potionUsed = buff_uptime_container[spellId]
+							-- print(spellId)
+							
+							if(potionUsed) then
+								-- print(GetSpellInfo(spellId))
+								local used = potionUsed.activedamt
+								if(used and used > 0) then
+									total = total + used
+									found_potion = true
+									if(used > top) then
+										top = used
+									end
+									
+									--add amount to the player
+									instance_container:AddValue(player, used)
+								end
+							end
+						end
+					end
+					-- print('-------')
+					
+					if(found_potion) then
+						amount = amount + 1
+					end
+				end
+			end
+			---------------
+			local AllHealCharacters = combat:GetActorList(DETAILS_ATTRIBUTE_HEAL)
+			for index, character in ipairs(AllHealCharacters) do
+				local AllSpells = character:GetSpellList()
+				local found = false
+				for spellid, spell in pairs(AllSpells) do
+					if(DETAILS_CUSTOM_POILO[spellid]) then
+						instance_container:AddValue(character, 1)
+						total = total + spell.total
+						if(top < spell.total) then
+							top = spell.total
+						end
+						found = true
+					end
+				end
+				
+				if(found) then
+					amount = amount + 1
+				end
+			end
+	
+	
+			--return:
+			return total, top, amount
+	
+		]],
+		total_script = [[
+			local value, top, total, combat, instance = ...
+			return math.floor (value)
+	
+		]],
+		percent_script = [[
+			local value, top, total, combat, instance = ...
+			return string.format ("%.1f", value/total*100)
+	
+		]],
+		tooltip =[[		
+			--init:
+			local player, combat, instance = ...
+	
+			--get the debuff container for potion of focus
+			local debuff_uptime_container = player.debuff_uptime and player.debuff_uptime_spells and player.debuff_uptime_spells._ActorTable
+			if(debuff_uptime_container) then
+				local focus_potion = debuff_uptime_container[DETAILS_FOCUS_POTION_ID]
+				if(focus_potion) then
+					local name, _, icon = GetSpellInfo(DETAILS_FOCUS_POTION_ID)
+					GameCooltip:AddLine(name, 1) --> can use only 1 focus potion(can't be pre-potion)
+					_detalhes:AddTooltipBackgroundStatusbar()
+					GameCooltip:AddIcon(icon, 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
+				end
+			end
+	
+			--get the misc actor container
+			local buff_uptime_container = player.buff_uptime and player.buff_uptime_spells and player.buff_uptime_spells._ActorTable
+			if(buff_uptime_container) then
+				for spellId, _ in pairs(DetailsFramework.PotionIDs) do
+					local potionUsed = buff_uptime_container[spellId] 
+					
+					if(potionUsed) then
+						
+						local name, _, icon = GetSpellInfo(spellId)            
+						GameCooltip:AddLine(name, potionUsed.activedamt)
+						
+						_detalhes:AddTooltipBackgroundStatusbar()
+						GameCooltip:AddIcon(icon, 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
+					end
+				end
+			end		
+			local R, G, B, A = 0, 0, 0, 0.75
+	
+	
+			local AllHealCharacters = combat:GetActorList(DETAILS_ATTRIBUTE_HEAL)
+			for index, character in ipairs(AllHealCharacters) do
+				local AllSpells = character:GetSpellList()
+				--local found = false
+				for spellid, spell in pairs(AllSpells) do
+					if(DETAILS_CUSTOM_POILO[spellid]) then
+						GameCooltip:AddLine(select(1, GetSpellInfo(52697)),  _detalhes:ToK(spell.total+1))
+						GameCooltip:AddIcon(select(3, GetSpellInfo(52697)), 1, 1, _detalhes.tooltip.line_height, _detalhes.tooltip.line_height)
+						GameCooltip:AddStatusBar(100, 1, R, G, B, A)
+					end
+				end
+			end
+		]]
+	}
+	_detalhes:InstallCustomObject(PotionUsed)
+
+	-- local TankInfo = {
+	-- 	name = "Полученный урон",
+	-- 	icon = [[Interface\Icons\Ability_Defend]],
+	-- 	source = false,
+	-- 	attribute = false,
+	-- 	spellid = false,
+	-- 	target = false,
+	-- 	author = "fxpw",
+	-- 	desc = "Shows info for tanks",
+	-- 	script_version = 1,
+	-- 	script = [[		
+	-- 		]],
+	-- 	total_script = [[	
+	-- 		]],
+	-- 	percent_script = [[	
+	-- 		]],
+	-- 	tooltip =[[			
+	-- 		]]
+	-- }
+
+	-- _detalhes:InstallCustomObject(TankInfo)
+
+	local SunderCount = {
+		name = "Sunder Count",
+		icon = [[Interface\Icons\Ability_Warrior_Sunder]],
+		source = false,
+		attribute = false,
+		spellid = false,
+		target = false,
+		author = "fxpw",
+		desc = "Shows who uses Sunder Armor.",
+		script_version = 2,
+		script = [[
+			local combat, container, instance = ...
+			local total, top, amount = 0, 0, 0
+	
+			local sunderName = 7386
+			local actors = combat:GetActorList(DETAILS_ATTRIBUTE_MISC)
+			for i, actor in ipairs(actors) do
+				if actor:IsPlayer() and actor.spell_cast then
+					for spellName, count in pairs(actor.spell_cast) do
+						if spellName == sunderName then
+							container:AddValue(actor, count)
+						end
+					end
+				end
+			end
+	
+			total, top = container:GetTotalAndHighestValue()
+			amount = container:GetNumActors()
+	
+			return total, top, amount
+		]],
+		total_script = [[
+			local value, top, total, combat, instance = ...
+			return math.floor(value)
+		]],
+		percent_script = [[
+			local value, top, total, combat, instance = ...
+			return string.format("%.1f", value / total * 100)
+		]],
+		tooltip = false,
+		notooltip = true,
+	}
+	_detalhes:InstallCustomObject(SunderCount)
 ---------------------------------------
 
 	_detalhes:ResetCustomFunctionsCache()

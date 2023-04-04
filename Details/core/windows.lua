@@ -4234,11 +4234,10 @@ local _utf8sub = string.utf8sub
 
 			--> create run now button
 
-			--from weakauras, list of functions to block on scripts
-			--source https://github.com/WeakAuras/WeakAuras2/blob/520951a4b49b64cb49d88c1a8542d02bbcdbe412/WeakAuras/AuraEnvironment.lua#L66
+				--source https://github.com/WeakAuras/WeakAuras2/blob/520951a4b49b64cb49d88c1a8542d02bbcdbe412/WeakAuras/AuraEnvironment.lua#L66
 			local blockedFunctions = {
 				-- Lua functions that may allow breaking out of the environment
-				getfenv = true,
+				setfenv = true,
 				getfenv = true,
 				loadstring = true,
 				pcall = true,
@@ -4266,20 +4265,33 @@ local _utf8sub = string.utf8sub
 				GuildDisband = true,
 				GuildUninvite = true,
 				securecall = true,
+				DeleteCursorItem = true,
+				ChatEdit_SendText = true,
+				CastSpellByName = true,
+				CastSpell = true,
+				CastSpellByID = true,
 
 				--additional
 				setmetatable = true,
 			}
-
-			local functionFilter = setmetatable ({}, {__index = function (env, key)
-				if (key == "_G") then
+			local blockedTables = {
+				SlashCmdList = true,
+				SendMailMailButton = true,
+				SendMailMoneyGold = true,
+				MailFrameTab2 = true,
+				ChatFrame1 = true,
+				WeakAurasOptions = true,
+				WeakAurasOptionsSaved = true
+			}
+			local functionFilter = setmetatable({}, {__index = function(env, key)
+				if key == "_G" then
 					return env
-
-				elseif (blockedFunctions [key]) then
+				elseif blockedFunctions[key] then
 					return nil
-
+				elseif blockedTables[key] then
+					return {}
 				else
-					return _G [key]
+					return _G[key]
 				end
 			end})
 

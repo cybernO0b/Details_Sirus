@@ -2,11 +2,11 @@
 --> global name declaration
 _detalhes = LibStub("AceAddon-3.0"):NewAddon("_detalhes", "AceTimer-3.0", "AceComm-3.0", "AceSerializer-3.0", "NickTag-1.0")
 
-_detalhes.build_counter = 7269
+_detalhes.build_counter = 7270
 _detalhes.alpha_build_counter = 7269 --if this is higher than the regular counter, use it instead
-_detalhes.game_version = "v8.3.0"
-_detalhes.userversion = "v8.3.0." .. _detalhes.build_counter
-_detalhes.realversion = 140 --core version, this is used to check API version for scripts and plugins (see alias below)
+_detalhes.game_version = "v3.3.5"
+_detalhes.userversion = "v3.3.5." .. _detalhes.build_counter
+_detalhes.realversion = 141 --core version, this is used to check API version for scripts and plugins (see alias below)
 _detalhes.APIVersion = _detalhes.realversion --core version
 _detalhes.version = _detalhes.userversion .. " (core " .. _detalhes.realversion .. ")" --simple stirng to show to players
 
@@ -83,7 +83,7 @@ do
 				[530] = true, -- Ulduar
 				[925] = true, -- The Bronze Sanctuary
 				[914] = true, -- zort
-				[864] = true, -- hijal
+				[864] = true,
 			}
 
 			--must fail in map and encounter id to not store data
@@ -203,19 +203,20 @@ do
 				[70010] = 1, --norigorn
 				--zort
 				[50702] = 1, --zort
-				--hijal
+				--hij
 				[17767] = 1,
 				[17808] = 2,
 				[17888] = 3,
 				[17842] = 4,
-				[17968] = 5,
+				[17968] = 5
+
 
 			}
 
 		--> armazena os escudos - Shields information for absorbs
 			_detalhes.escudos = {}
 		--> armazena as fun��es dos frames - Frames functions
-			_detalhes.gump = _G["DetailsFramework"]
+			_detalhes.gump = _G ["DetailsFramework"]
 			function _detalhes:GetFramework()
 				return self.gump
 			end
@@ -504,7 +505,7 @@ do
 				_detalhes.StatusBar.Plugins = {}
 			--> name to plugin object
 				_detalhes.StatusBar.NameTable = {}
-
+			
 
 	--> constants
 		--[[global]] DETAILS_HEALTH_POTION_LIST = {
