@@ -1625,11 +1625,13 @@ function _detalhes:StoreEncounter (combat)
 		local myrole = "DAMAGER" --UnitGroupRolesAssigned ("player")
 		local myrole2 = "HEALER"
 		local mybest, onencounter = _detalhes.storage:GetBestFromPlayer (diff, encounter_id, myrole, _detalhes.playername, true) --> get dps or hps
-		mybest[1] = mybest[1] or 0
-		local myBestDps = (mybest [1] / onencounter.elapsed) or 0
+		mybest = mybest or {}
+		mybest[1] = mybest and mybest[1] or 0
+		local myBestDps = (mybest and (mybest [1] / (onencounter and onencounter.elapsed))) or 0
 		local mybest2, onencounter2 = _detalhes.storage:GetBestFromPlayer (diff, encounter_id, myrole2, _detalhes.playername, true) --> get dps or hps
-		mybest2[1] = mybest2[1] or 0
-		local myBestHps = (mybest2 [1]  / onencounter2.elapsed) or 0
+		mybest2 = mybest2 or {}
+		mybest2[1] = mybest2 and mybest2[1] or 0
+		local myBestHps = (mybest2 and (mybest2 [1]  / (onencounter2 and onencounter2.elapsed or 1))) or 0
 		myBestHps = myBestHps or 0
 		myBestDps = myBestDps or 0
 		if (mybest or mybest2) then
