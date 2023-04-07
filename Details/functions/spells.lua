@@ -1026,7 +1026,7 @@ do
 		-- [319521] = 10, --t6 медведь
 		-- Custom
 		[304736] = 10, -- Priest, Divine Charm (T4), T4
-		[305082] = 10, -- Priest, Power Word: Shield (T4), T4
+		[305082] = 8, -- Priest, Power Word: Shield (T4), T4
 		[315529] = 10, -- расколотое солнце
 
 		-- trinkets
@@ -1034,10 +1034,11 @@ do
 
 		[55277] = 12, -- shmn ttm
 		--ttg
-		[318754] = 7, --ench ttg
+		[318754] = 7, --ench ttg hpal
+		[320439] = 10, -- nefrit charge
 
 		[319795] = 5,
-		[320095] = 5,
+		[320059] = 5,
 		[320284] = 5,
 		[320173] = 5,
 
@@ -1046,6 +1047,15 @@ do
 		[317907] = 10,
 		[317909] = 10,
 		[317911] = 10,
+		[319797] = 10,
+		[320061] = 10,
+		[320175] = 10,
+		[320286] = 10,
+
+		[315521] = 10,
+		[315523] = 10,
+		[315525] = 10,
+		[315527] = 10,
 
 		-- Death Knight
 		[48707] = 5, -- Anti-Magic Shell (DK) Rank 1 -- Does not currently seem to show tracable combat log events. It shows energizes which do not reveal the amount of damage absorbed
@@ -1167,7 +1177,7 @@ do
 		[31002] = 300, -- Pendant of the Null Rune
 		[30999] = 300, -- Pendant of Withering
 		[30994] = 300, -- Pendant of Thawing
-		[31000] = 300, --
+		-- [31000] = 300, --
 		[23506]= 20, -- Arena Grand Master Usage (Aura of Protection)
 		[12561] = 60, -- Goblin Construction Helmet usage
 		[31771] = 20, -- Runed Fungalcap usage
@@ -1189,7 +1199,7 @@ do
 		[54808] = 12, -- Noise Machine proc Sonic Shield
 		[55019] = 12, -- Sonic Shield (one of these too ought to be wrong)
 		-- [64411] = 8, -- Blessing of the Ancient (Val'anyr Hammer of Ancient Kings equip effect)
-		-- [64413] = 1, -- Val'anyr, Hammer of Ancient Kings proc Protection of Ancient Kings
+		[64413] = 8, -- Val'anyr, Hammer of Ancient Kings proc Protection of Ancient Kings
 		-- Misc
 		[40322] = 30, -- Teron's Vengeful Spirit Ghost - Spirit Shield
 		-- Boss abilities
@@ -1203,7 +1213,7 @@ do
 		[67261] = 15, -- 1200000
 		[65686] = 86400, -- Twin Val'kyr Light Essence
 		[65684] = 86400, -- Twin Val'kyr Dark Essence
-		[320439] = 10, -- nefrit charge
+
 
 
 
