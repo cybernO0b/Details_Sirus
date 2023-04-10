@@ -1229,7 +1229,7 @@ local default_player_data = {
 			MurazondDmgSkip = true,
 			WriteAllAuras = false,
 			channel = "SELF",
-			EnterInCombatWhenHeal = true,
+			EnterInCombatWhenHeal = false,
 		},
 		announce_damagerecord = {
 			enabled = true,
