@@ -3730,10 +3730,10 @@ function _detalhes:CaptureDisable(capture_type)
 		token_list["SPELL_HEAL_ABSORBED"] = nil
 		_recording_healing = false
 	elseif capture_type == "aura" then
-		token_list["SPELL_AURA_APPLIED"] = parser.buff
-		token_list["SPELL_AURA_REMOVED"] = parser.unbuff
-		token_list["SPELL_AURA_REFRESH"] = parser.buff_refresh
-		token_list["SPELL_AURA_APPLIED_DOSE"] = parser.buff_refresh
+		token_list["SPELL_AURA_APPLIED"] = nil
+		token_list["SPELL_AURA_REMOVED"] = nil
+		token_list["SPELL_AURA_REFRESH"] = nil
+		token_list["SPELL_AURA_APPLIED_DOSE"] = nil
 		_recording_buffs_and_debuffs = false
 	elseif capture_type == "energy" then
 		token_list["SPELL_ENERGIZE"] = nil
@@ -5042,7 +5042,7 @@ function _detalhes:UpdateParserGears()
 
 	--> refresh data capture options
 	_recording_self_buffs = _detalhes.RecordPlayerSelfBuffs
-	--_recording_healing = _detalhes.RecordHealingDone
+	-- _recording_healing = _detalhes.RecordHealingDone
 	--_recording_took_damage = _detalhes.RecordRealTimeTookDamage
 	_recording_ability_with_buffs = _detalhes.RecordPlayerAbilityWithBuffs
 	_in_combat = _detalhes.in_combat

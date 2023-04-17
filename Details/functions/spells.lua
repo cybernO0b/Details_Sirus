@@ -1028,7 +1028,7 @@ do
 		[304736] = 10, -- Priest, Divine Charm (T4), T4
 		[305082] = 8, -- Priest, Power Word: Shield (T4), T4
 		[315529] = 10, -- расколотое солнце
-
+		[320176] = 10,
 		-- trinkets
 		[317293] = 10, -- bronze statuette
 

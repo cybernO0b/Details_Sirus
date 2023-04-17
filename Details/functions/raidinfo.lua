@@ -1356,7 +1356,7 @@ do --> data for zort
 		encounters = ENCOUNTERS,
 
 		boss_ids = {
-		[70010] = 1, --zort
+		[50702] = 1, --zort
 
 		},
 	})
