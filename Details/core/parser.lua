@@ -4120,11 +4120,14 @@ function _detalhes.parser_functions:ENCOUNTER_START(...)
 	if _detalhes.latest_ENCOUNTER_END + 10 > _GetTime() then
 		return
 	end
+	if _detalhes.last_combat_time + 10 > time() then
+		return
+	end
 
 	-- TEMP
 	--> leave the current combat when the encounter start, if is doing a mythic plus dungeons, check if the options alows to create a dedicated segment for the boss fight
 	if (_in_combat and not _detalhes.tabela_vigente.is_boss) then
-		_detalhes:SairDoCombate()
+		-- _detalhes:SairDoCombate()
 	end
 
 	local encounterID, encounterName, difficultyID, raidSize = ...

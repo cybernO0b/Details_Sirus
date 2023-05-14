@@ -1322,7 +1322,7 @@ do --> data for zort
 
 	local ENCOUNTER_ID_CL = {
 		50702,
-	[50702] = 1, --Zort
+		[50702] = 1, --Zort
 
 	}
 
