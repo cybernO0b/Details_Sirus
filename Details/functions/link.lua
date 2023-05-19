@@ -100,14 +100,14 @@
 			local dbm_callback_start = function(event, encounterID, encounterName)
 				local _, _, _, _, maxPlayers = GetInstanceInfo()
 				local difficulty = GetInstanceDifficulty()
-				if encounterID == 34497 or encounterID == 34496 or encounterID == 33293 then return end
+				if encounterID == 34497 or encounterID == 34496 or encounterID == 33293 or encounterID == 37813 then return end
 				_detalhes.parser_functions:ENCOUNTER_START(encounterID, LBB[encounterName], difficulty, maxPlayers)
 			end
 
 			local dbm_callback_end = function(event, encounterID, encounterName, endStatus)
 				local _, _, difficultyID, _, maxPlayers = GetInstanceInfo()
 				local difficulty = GetInstanceDifficulty()
-				if encounterID == 34497 or encounterID == 34496 or encounterID == 33293 then return end
+				if encounterID == 34497 or encounterID == 34496 or encounterID == 33293 or encounterID == 37813 then return end
 				_detalhes.parser_functions:ENCOUNTER_END(encounterID, LBB[encounterName], difficulty, maxPlayers, endStatus)
 			end
 
