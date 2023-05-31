@@ -1653,13 +1653,16 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsVisible = UnitIsVisible
 
 
-local modelsToFix ={
-	["scourgemale.m2"] = true,
+local tableModelList = {
 	["dwarfmale.m2"] = true,
 	["orcmalenpc.m2"] = true,
 	["scourgemalenpc.m2"] = true,
 	["scourgefemalenpc.m2"] = true,
 	["dwarfmalenpc.m2"] = true,
+	["humanmalekid.m2"] = true,
+	["humanfemalekid.m2"] = true,
+	["chicken.m2"] = true,
+	["rat.m2"] = true,
 	["scourgemale_hd.m2"] = true,
 	["scourgefemale_hd.m2"] = true,
 	["dwarfmale_hd.m2"] = true,
@@ -1668,7 +1671,15 @@ local modelsToFix ={
 	["vulperamale.m2"] = true,
 	["humanfemale_hd.m2"] = true,
 	["darkirondwarfmale.m2"] = true,
+	["dracthyrdragonmale1.m2"] = true,
+	["dracthyrfemale.m2"] = true,
+	["dracthyrdragonfemale2.m2"] = true,
+	["dracthyrdragonfemale3.m2"] = true,
+	["skeleton_hd.m2"] = true,
+	["taurenmale_hd.m2"] = true,
 }
+local str
+local pattern = "[^\\]*%.m2$"
 local function UpdateModelFrame(frame,unit)
 	-- print(unit)
 	if not frame.model then
@@ -1685,47 +1696,38 @@ local function UpdateModelFrame(frame,unit)
 	if unit then
 		isAvailable = UnitIsConnected(unit) and UnitIsVisible(unit)
 	end
-
+	element:SetCamera(0)
 	if unit and (element:IsObjectType('Model')) then
 		if (not isAvailable) then
 			GameCooltipFrame1.model:Show()
 			-- element:ClearModel()
 			element:SetModelScale(4.25)
-			element:SetCamera(0)
 			element:SetPosition(0, 0, -1.5)
 			element:SetModel([[Interface\Buttons\TalkToMeQuestionMark.m2]])
-
 		else
 			GameCooltipFrame1.model:Show()
 			element:ClearModel()
 			element:SetUnit(unit)
-			element:SetCamera(0)
 			element:SetModelScale(1)
 			element:SetPosition(0, 0, 0)
+			if element:IsObjectType("Model") then
+				str = element:GetModel()
+				if type(str) ~= "string" then return end
+				str = string.lower(str)
+				str = string.match(str,pattern)
+				if str and tableModelList[str] then
+					element:SetCamera(1)
+				end
+			end
 		end
-		local str
-		if frame.model:IsObjectType("Model") then
-			str = frame.model:GetModel()
-			if type(str) ~= "string" then return end
-			str = string.lower(str)
-		end
-		if modelsToFix[str] then
-			-- isneedfix = true
-			element:SetCamera(1)
-		else
-			element:SetCamera(0)
-		end
+
 	else
 		GameCooltipFrame1.model:Show()
-		-- element:ClearModel()
 		element:SetModelScale(4.25)
 		element:SetCamera(0)
 		element:SetPosition(0, 0, -1.5)
 		element:SetModel([[Interface\Buttons\TalkToMeQuestionMark.m2]])
-		-- print("da")
 	end
-
-
 end
 
 local function FindModelByName(who)
