@@ -1029,7 +1029,6 @@ do
 		[304736] = 10, -- Priest, Divine Charm (T4), T4
 		[305082] = 8, -- Priest, Power Word: Shield (T4), T4
 		[315529] = 10, -- расколотое солнце
-		[320176] = 10,
 		-- trinkets
 		[317293] = 10, -- bronze statuette
 
@@ -1050,13 +1049,17 @@ do
 		[317911] = 10,
 		[319797] = 10,
 		[320061] = 10,
-		[320175] = 10,
+		-- [320175] = 10,
 		[320286] = 10,
 
 		[315521] = 10,
 		[315523] = 10,
 		[315525] = 10,
 		[315527] = 10,
+		[319895] = 10,
+		[320062] = 10,
+		[320176] = 10,
+		[320287] = 10,
 
 		-- Death Knight
 		[48707] = 5, -- Anti-Magic Shell (DK) Rank 1 -- Does not currently seem to show tracable combat log events. It shows energizes which do not reveal the amount of damage absorbed
