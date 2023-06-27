@@ -6061,15 +6061,15 @@ local build_segment_list = function(self, elapsed)
 		local dungeon_run_id = false
 
 		--> history table(segments container)
-		for i = _detalhes.segments_amount, 1, -1 do
-
-			if(i <= fill) then
-
-				local thisCombat = _detalhes.tabela_historico.tabelas[i]
-				if(thisCombat) then
+		for i = 1, _detalhes.segments_amount do
+			local reversed_i = _detalhes.segments_amount - i + 1
+		
+			if (reversed_i <= fill) then
+				local thisCombat = _detalhes.tabela_historico.tabelas[reversed_i]
+				if (thisCombat) then
 					local enemy = thisCombat.is_boss and thisCombat.is_boss.name
 					local segment_info_added = false
-
+		
 					segments_used = segments_used + 1
 
 					--print(thisCombat.is_boss.name, thisCombat.instance_type, _detalhes:GetRaidIcon(thisCombat.is_boss.mapid), thisCombat.is_boss.ej_instance_id)
